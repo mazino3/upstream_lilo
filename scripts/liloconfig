@@ -470,24 +470,38 @@ sub write_bootroot_option {
 		# line read from MYFH_TMP
 		$oldline = $_;
 
+		# lines beginning direct with boot option
 		if (/^boot/ and $ok == 0) {
 			if ($boot_id) {
-				$oldline = "#boot = $boot_dev\n";
-				$newline = "boot = $boot_id\n";
-				print MYFH_NEW $oldline;
-				if($opt_v) { print $oldline; }
+				$newline = "#boot = " . $boot_dev . "\n";
+				print MYFH_NEW $newline;
+				if($opt_v) { print $newline; }
+				$newline = "boot = " . $boot_id . "\n";
 			}
 			else {
-				$oldline = "boot = $boot_dev\n";
+				$newline = "boot = " . $boot_dev . "\n";
 			}
 			print MYFH_NEW $newline;
-			if($opt_v) { print $newline; }
-			if($opt_v) { print "\n"; }
-
+			if($opt_v) { print $newline; print "\n";}
 			# convert only one time
 			$ok = 1;
 		}
-		else {
+		# lines beginning direct with root option
+		elsif (/^root\ =/) {
+			if ($root_id) {
+				$newline = '#root = ' . $root_dev . "\n";
+				print MYFH_NEW $newline;
+				if($opt_v) { print $newline; }
+				$newline = 'root = "' . $root_id . '"' . "\n";
+			}
+			else {
+				$newline = 'root = ' . $root_dev . "\n";
+			}
+			print MYFH_NEW $newline;
+			if($opt_v) { print $newline; print "\n";}
+		}
+		# print the rest into file, but not old commented root lines
+		elsif ( not (/^\#boot\ =/ or /^\#root\ =/) ) {
 			print MYFH_NEW $oldline;
 		}
 	}
@@ -565,22 +579,25 @@ sub write_image_config {
 
 	my $image;
 	my $initrd;
+	my $initrd2;
 	my $nr;
 	my $nr2;
-
-	# search for kernel image files
-	my @vmlinuz = readpipe("/bin/ls -t -1 /boot/vmlinuz-* 2>/dev/null");
 
 	# append to new lilo.conf
 	open(MYFH_NEW, ">> $liloconfnew") or die "Cannot open file: $!";
 
-	# create some line for each kernel image
+	# search for kernel image files
+	my @vmlinuz = readpipe("/bin/ls -t -1 /boot/vmlinuz* 2>/dev/null");
+
+	# create some lines for each kernel image
 	$nr = 0;
 	foreach $image (@vmlinuz) {
 		# search for kernel initrd file
 		chomp $image;
 		$initrd = $image;
 		$initrd =~ s/vmlinuz/initrd\.img/;
+		$initrd2 = $initrd;
+		$initrd2 =~ s/\.img//;
 		$nr2 = $nr + 1;
 
 		print MYFH_NEW     'image = ' . $image . "\n";
@@ -618,6 +635,10 @@ sub write_image_config {
 		if (-e $initrd) {
 			print MYFH_NEW     "\t"  . 'initrd = ' . $initrd . "\n";
 			if($opt_v) { print "\t"  . 'initrd = ' . $initrd . "\n"; }
+		}
+		elsif (-e $initrd2) {
+			print MYFH_NEW     "\t"  . 'initrd = ' . $initrd2 . "\n";
+			if($opt_v) { print "\t"  . 'initrd = ' . $initrd2 . "\n"; }
 		}
 		else {
 			if($opt_v) { print "W: initrd $initrd could not be found!\n" }
