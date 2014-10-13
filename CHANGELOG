@@ -19,6 +19,8 @@ Changes for version 24.1 (unreleased) - Joachim Wiedorn
         * now with update function
         * now with more tolerant file names of initram
         * now with use of kernel links as fallback
+    - Update example config in lilo.example.conf.
+    - Update manpage of liloconfig and lilo-uuid-diskid.
 
 
 Changes for version 24.0 (07-June-2013) - Joachim Wiedorn
