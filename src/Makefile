@@ -245,7 +245,10 @@ install:
 
 	strip lilo
 	cp lilo $$DESTDIR$(SBIN_DIR)/lilo
-	[ -x lilo.static ] && strip lilo.static
+	if [ -x lilo.static ]; then \
+	  strip lilo.static; \
+	  cp lilo.static $$DESTDIR$(SBIN_DIR)/lilo.static; \
+	fi
 	cp ../mkrescue $$DESTDIR$(USRSBIN_DIR)/mkrescue
 	cp ../keytab-lilo.pl $$DESTDIR$(USRSBIN_DIR)/keytab-lilo
 
