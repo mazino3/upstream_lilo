@@ -24,10 +24,11 @@ case "$PAR" in
 
   ever|remove)
     # Run the boot loader installer
+    # and ignore error on degraded mdadm RAID1
     if [ -f /sbin/lilo ]; then
       if [ -f /etc/lilo.conf ]; then
         # Do not abort kernel removal in case of error
-        lilo  </dev/null  >&2  || true
+        lilo -H  </dev/null  >&2  || true
       fi
     fi
     ;;

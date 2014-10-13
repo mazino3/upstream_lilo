@@ -26,9 +26,10 @@ case "$PAR" in
 
   *)
     # Run the boot loader installer
+    # and ignore error on degraded mdadm RAID1
     if [ -f /sbin/lilo ];then
       if [ -f /etc/lilo.conf ];then
-        lilo  </dev/null  >&2
+        lilo -H  </dev/null  >&2
       else
         echo "Warning: Not updating LILO; /etc/lilo.conf not found!" >&2
       fi
