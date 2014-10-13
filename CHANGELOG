@@ -6,6 +6,8 @@ Changes for version 24.1 (unreleased) - Joachim Wiedorn
     - Install the .dat files of images, too (images/Makefile).
     - Fix target 'all' in main Makefile.
     - Install lilo.static, too, if existing.
+    - Add CFLAGS, CPPFLAGS, LDFLAGS everywhere needed
+        (useful e.g. for hardening in Debian).
 
 
 Changes for version 24.0 (07-June-2013) - Joachim Wiedorn
