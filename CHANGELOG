@@ -1,3 +1,12 @@
+Changes for version 24.1 (unreleased) - Joachim Wiedorn
+
+  Sources
+  -------
+    - Only warn if founded bad partition (src/partition.c).
+    - Install the .dat files of images, too (images/Makefile).
+    - Fix target 'all' in main Makefile.
+
+
 Changes for version 24.0 (07-June-2013) - Joachim Wiedorn
 
   Documentations
