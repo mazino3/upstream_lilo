@@ -2,7 +2,8 @@
 
 #       liloconfig -  creating a new lilo.conf file
 #       
-#       Copyright 2011-2013 Joachim Wiedorn <ad_debian@joonet.de>
+#       
+#       Copyright 2011-2014 Joachim Wiedorn <ad_debian@joonet.de>
 #       
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -30,14 +31,15 @@ use File::Copy;
 #---- global variables
 my $prog = $0;
 $prog =~ s#.*/##;
-my $version = "0.2";
+my $version = "0.4";
 
 #---- parameter check
 # h: help, v: verbose, f: force
 our $opt_h = 0;
 our $opt_v = 0;
 our $opt_f = 0;
-getopts('hvf');
+our $opt_u = 0;
+getopts('hvfu');
 # define perldoc usage
 pod2usage(1) if $opt_h;
 
@@ -71,12 +73,13 @@ sub main {
 		$liloconfold = $liloconf . ".old";
 		$liloconfnew = $liloconf . ".new";
 	}
-	if (-f $liloconf and not $opt_f) {
-		print "$prog: $liloconf already exist! Please use '-f' for overwriting.\n";
+	if (-f $liloconf and not $opt_f and not $opt_u) {
+		print $prog .": " . $liloconf .
+		  " already exist! Please force overwriting with '-f' or '-u'.\n";
 		$exit = 1;
 	}
 	else {
-		$exit = create_lilo_conf()
+		$exit = create_lilo_conf();
 	}		
 	return $exit;
 }
@@ -95,7 +98,10 @@ sub create_lilo_conf {
 	if ($found) { $found = convert_boot_device(); }
 
 	# finally write new lilo.conf file
-	if ($found) { $exit = write_lilo_conf(); }
+	if ($found) {
+	  if ($opt_u) { $exit = update_lilo_conf(); }
+	  else        { $exit = write_lilo_conf(); }
+	}
 
 	return $exit;
 }
@@ -262,7 +268,7 @@ sub convert_boot_device {
 	my $boot_disk = '';
 	my $boot_link;
 	# global variables: $boot_dev, $boot_id
-
+	
 	if (-b $root_dev) {
 		if ($root_dev =~ /\/dev\/md/) {
 			# search if the found partition is a raid volume
@@ -287,7 +293,7 @@ sub convert_boot_device {
 		print "E: could not find root device $root_dev! \n";
 		$found = 0;
 	}
-
+	
 	if ($found) {
 		if($opt_v) { print "Convert boot option $boot_disk into DISK ID\n"; }
 		$boot_id = $idpath . "/" . find_id_link($boot_disk,$idpath);
@@ -298,7 +304,7 @@ sub convert_boot_device {
 			#$found = 0;
 		}
 	}
-
+	
 	return $found;
 }
 
@@ -308,7 +314,7 @@ sub check_raid {
 	my $mdname;
 	my $md;
 	my @devices;
-
+	
 	# check if the found partition is a raid volume
 	if($part =~ /\/dev\/md/)
 	{
@@ -321,8 +327,8 @@ sub check_raid {
 		@devices = sort(@devices[4..$#devices]);
 		$part = "/dev/" . $devices[0];
 		$part =~ s/\[.*$//;
-
 	}
+	
 	return $part;
 }
 
@@ -408,6 +414,9 @@ vga = normal
 	}
 	
 	return $exit;
+}
+
+sub update_lilo_conf {
 }
 
 sub write_boot_option {
@@ -502,12 +511,12 @@ sub write_image_config {
 		print MYFH_NEW     "#\t" . 'optional' . "\n";
 		if($opt_v) { print "#\t" . 'optional' . "\n"; }
 
-		if (-f $initrd) {
+		if (-e $initrd) {
 			print MYFH_NEW     "\t"  . 'initrd = ' . $initrd . "\n";
 			if($opt_v) { print "\t"  . 'initrd = ' . $initrd . "\n"; }
 		}
 		else {
-			if($opt_v) { print "initrd $initrd could not be found!\n" }
+			if($opt_v) { print "W: initrd $initrd could not be found!\n" }
 		}
 
 		print MYFH_NEW     "\n";
