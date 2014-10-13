@@ -339,8 +339,13 @@ sub write_lilo_conf {
 
 	if (not $exit) {
 		# create lilo.conf.new
-		write_boot_option();
-		write_image_config();
+		write_bootroot_option();
+		if ( not write_image_config() ) {
+			if ( not write_imagelinks_config() ) {
+				print "E: Cannot find any images or image symlinks!\n";
+				$exit = 1;
+			}
+		}
 	}
 
 	if (-f $liloconf and not -f $liloconfold) {
@@ -417,9 +422,42 @@ vga = normal
 }
 
 sub update_lilo_conf {
+
+	my @status;
+	my $exit = 0;
+
+	if (-f $liloconf) {
+		# copy old config
+		system("cat $liloconf >$conftmp_2");
+		
+		# create lilo.conf.new
+		update_bootroot_option();
+	}
+	
+	if (-f $liloconf and not -f $liloconfold) {
+		# move old lilo.conf to lilo.conf.old
+		@status = stat($liloconf);
+		move ($liloconf, $liloconfold) or die "Cannot rename file: $!\n";
+		utime ($status[9],$status[9],$liloconfold);
+		chmod (0600,$liloconfold);
+		print "Old file moved to: $liloconfold \n";
+	}
+	if (-f $liloconfnew) {
+		move ($liloconfnew, $liloconf) or die "Cannot move file: $!\n";
+		chmod (0600,$liloconf);
+		print "New file created as: $liloconf \n";
+		print "Now you must execute '/sbin/lilo' to " . 
+		      "activate this new configuation!\n\n";
+	}
+	else {
+		print "E: Cannot find temporary file $conftmp_1!\n";
+		$exit = 1;
+	}
+	
+	return $exit;
 }
 
-sub write_boot_option {
+sub write_bootroot_option {
 	
 	my $oldline = '';
 	my $newline = '';
@@ -450,6 +488,72 @@ sub write_boot_option {
 			$ok = 1;
 		}
 		else {
+			print MYFH_NEW $oldline;
+		}
+	}
+	close(MYFH_TMP);
+	close(MYFH_NEW);
+}
+
+sub update_bootroot_option {
+	
+	my $oldline = '';
+	my $newline = '';
+	my $ok = 0;
+	
+	open(MYFH_NEW, "> $liloconfnew") or die "Cannot open file: $!";
+	open(MYFH_TMP, "< $conftmp_2") or die "Cannot read file: $!";
+	
+	while (<MYFH_TMP>) {
+		# read (old) line from MYFH_TMP
+		$oldline = $_;
+
+		# lines beginning direct with boot option
+		if (/^boot/ and $ok == 0) {
+			if ($boot_id) {
+				$newline = "#boot = " . $boot_dev . "\n";
+				print MYFH_NEW $newline;
+				if($opt_v) { print $newline; }
+				$newline = "boot = " . $boot_id . "\n";
+			}
+			else {
+				$newline = "boot = " . $boot_dev . "\n";
+			}
+			print MYFH_NEW $newline;
+			if($opt_v) { print $newline; print "\n";}
+			# convert only one time
+			$ok = 1;
+		}
+		# lines beginning direct with root option
+		elsif (/^root\ =/) {
+			if ($root_id) {
+				$newline = '#root = ' . $root_dev . "\n";
+				print MYFH_NEW $newline;
+				if($opt_v) { print $newline; }
+				$newline = 'root = "' . $root_id . '"' . "\n";
+			}
+			else {
+				$newline = 'root = ' . $root_dev . "\n";
+			}
+			print MYFH_NEW $newline;
+			if($opt_v) { print $newline; print "\n";}
+		}
+		# lines beginning with one tabulator or with two - eight spaces
+		elsif (/^\troot\ =/ or /^\ {2,8}root\ =/) {
+			if ($root_id) {
+				$newline = "\t" . '#root = ' . $root_dev . "\n";
+				print MYFH_NEW $newline;
+				if($opt_v) { print $newline; }
+				$newline = "\t" . 'root = "' . $root_id . '"' . "\n";
+			}
+			else {
+				$newline = "\t" . 'root = ' . $root_dev . "\n";
+			}
+			print MYFH_NEW $newline;
+			if($opt_v) { print $newline; print "\n";}
+		}
+		# print the rest into file, but not old commented root lines
+		elsif ( not (/^\#boot\ =/ or /^\#root\ =/ or /^\t\#root\ =/ or /^\ {2,8}\#root\ =/) ) {
 			print MYFH_NEW $oldline;
 		}
 	}
@@ -528,8 +632,10 @@ sub write_image_config {
 
 	close(MYFH_NEW);
 }		
-		
-	
+
+sub write_imagelinks_config {
+}
+
 main();
 
 __END__
