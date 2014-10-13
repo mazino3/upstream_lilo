@@ -1,11 +1,18 @@
 # -*- makefile -*-
 #
-# Copyright 2009-2013 Joachim Wiedorn
+# Copyright 2009-2014 Joachim Wiedorn
 # All rights reserved.
 # 
 # Licensed under the terms contained in the file 'COPYING'
 # in the source directory.
 #
+
+#
+# everything needed to run, just short of installation
+#
+all: test
+	make -C src all
+	make -C images all
 
 #
 #  make help
@@ -32,13 +39,6 @@ help:
 	@echo "  make clean       # remove objects & ready for a fresh 'make all'"
 	@echo "  make distclean   # remove editor temps, & all of the above"
 	@echo ""
-
-#
-# everything needed to run, just short of installation
-#
-all: test
-	$(MAKE) -C src all
-	$(MAKE) -C images all
 
 #
 # everything above plus the statically linked version
