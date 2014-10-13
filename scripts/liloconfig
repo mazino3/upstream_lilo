@@ -404,6 +404,7 @@ sub copy_template {
 #large-memory
 lba32
 boot = /dev/sda
+root = /dev/sda1
 map = /boot/map
 install = menu
 menu-scheme = Wb:Yr:Wb:Wb
@@ -610,17 +611,6 @@ sub write_image_config {
 		elsif ($nr == 1) {
 			print MYFH_NEW     "\t"  . 'label = "Linux Old"' . "\n";
 			if($opt_v) { print "\t"  . 'label = "Linux Old"' . "\n"; }
-		}
-
-		if ($root_id) {
-			print MYFH_NEW     "\t"  . '#root = ' . $root_dev . "\n";
-			if($opt_v) { print "\t"  . '#root = ' . $root_dev . "\n"; }
-			print MYFH_NEW     "\t"  . 'root = "' . $root_id . '"' . "\n";
-			if($opt_v) { print "\t"  . 'root = "' . $root_id . '"' . "\n"; }
-		}
-		else {
-			print MYFH_NEW     "\t"  . 'root = ' . $root_dev . "\n";
-			if($opt_v) { print "\t"  . 'root = ' . $root_dev . "\n"; }
 		}
 
 		print MYFH_NEW     "\t"  . 'read-only' . "\n";
