@@ -634,6 +634,74 @@ sub write_image_config {
 }		
 
 sub write_imagelinks_config {
+	my $image;
+	my $initrd;
+	my $nr;
+	my $nr2;
+
+	# append to new lilo.conf
+	open(MYFH_NEW, ">> $liloconfnew") or die "Cannot open file: $!";
+
+	# search for kernel image files
+	my @vmlinuz = readpipe("/bin/ls -t -1 /vmlinuz /vmlinuz.old 2>/dev/null");
+
+	# create some lines for each kernel image
+	$nr = 0;
+	foreach $image (@vmlinuz) {
+		# search for kernel initrd file
+		chomp $image;
+		$initrd = $image;
+		$initrd =~ s/vmlinuz/initrd\.img/;
+		$nr2 = $nr + 1;
+
+		print MYFH_NEW     'image = ' . $image . "\n";
+		if($opt_v) { print 'image = ' . $image . "\n"; }
+
+		if ($nr == 0) {
+			print MYFH_NEW     "\t"  . 'label = "Linux"' . "\n";
+			if($opt_v) { print "\t"  . 'label = "Linux"' . "\n"; }
+		}
+		elsif ($nr == 1) {
+			print MYFH_NEW     "\t"  . 'label = "Linux Old"' . "\n";
+			if($opt_v) { print "\t"  . 'label = "Linux Old"' . "\n"; }
+		}
+
+		if ($root_id) {
+			print MYFH_NEW     "\t"  . '#root = ' . $root_dev . "\n";
+			if($opt_v) { print "\t"  . '#root = ' . $root_dev . "\n"; }
+			print MYFH_NEW     "\t"  . 'root = "' . $root_id . '"' . "\n";
+			if($opt_v) { print "\t"  . 'root = "' . $root_id . '"' . "\n"; }
+		}
+		else {
+			print MYFH_NEW     "\t"  . 'root = ' . $root_dev . "\n";
+			if($opt_v) { print "\t"  . 'root = ' . $root_dev . "\n"; }
+		}
+
+		print MYFH_NEW     "\t"  . 'read-only' . "\n";
+		if($opt_v) { print "\t"  . 'read-only' . "\n"; }
+		print MYFH_NEW     "#\t" . 'restricted' . "\n";
+		if($opt_v) { print "#\t" . 'restricted' . "\n"; }
+		print MYFH_NEW     "#\t" . 'alias = ' . "$nr2" . "\n";
+		if($opt_v) { print "#\t" . 'alias = ' . "$nr2" . "\n"; }
+		print MYFH_NEW     "#\t" . 'optional' . "\n";
+		if($opt_v) { print "#\t" . 'optional' . "\n"; }
+
+		if (-e $initrd) {
+			print MYFH_NEW     "\t"  . 'initrd = ' . $initrd . "\n";
+			if($opt_v) { print "\t"  . 'initrd = ' . $initrd . "\n"; }
+		}
+		else {
+			if($opt_v) { print "W: initrd $initrd could not be found!\n" }
+		}
+
+		print MYFH_NEW     "\n";
+		if($opt_v) { print "\n"; }
+
+		$nr++;
+		last if ($nr > 1);
+	}
+
+	close(MYFH_NEW);
 }
 
 main();
