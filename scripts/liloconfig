@@ -642,9 +642,19 @@ sub write_image_config {
 	}
 
 	close(MYFH_NEW);
+
+	if ($nr == 0) {
+		print "No images '/boot/vmlinuz*' found!\n"; 
+		if($opt_v) { print "\n"; }
+	}
+	elsif( not $opt_v ) {
+		print "$nr images '/boot/vmlinuz*' found.\n"; 
+	}
+	return ($nr > 0);     # if =0 this is an error
 }		
 
 sub write_imagelinks_config {
+
 	my $image;
 	my $initrd;
 	my $nr;
@@ -713,6 +723,15 @@ sub write_imagelinks_config {
 	}
 
 	close(MYFH_NEW);
+
+	if ($nr == 0) {
+		print "No image symlinks '/vmlinuz*' found!\n"; 
+		if($opt_v) { print "\n"; }
+	}
+	elsif( not $opt_v ) {
+		print "$nr image symlinks '/vmlinuz*' found.\n"; 
+	}
+	return ($nr > 0);     # if =0 this is an error
 }
 
 main();
