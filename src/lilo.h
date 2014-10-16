@@ -91,84 +91,81 @@
 
 
 /* the known major device numbers */
-#define MAJMIN_RAM	0x101 /* RAM disk */
+#define MAJMIN_RAM	    0x101 /* RAM disk */
 #ifdef LCF_MDPRAID
-#define MAJOR_MDP_SORT  1 /* Convert MAJOR_MDP to this for sorting */
+#define MAJOR_MDP_SORT   1    /*** Convert MAJOR_MDP to this for sorting ***/
 #endif
-#define MAJOR_EMD_SORT  2 /* Convert MAJOR_EMD to this for sorting */
-#define MAJOR_HPT370_SORT  2 /* Convert MAJOR_HPT370 to this for sorting */
-#define MAJOR_FD	2 /* floppy disks */
-#define MAJOR_HD	3 /* IDE-type hard disks */
-#define MAJOR_LOOP	7 /* Loopback devices 0-15 */
-#define MAJOR_SD	8 /* SCSI disks 0-15 */
-#define MAJOR_MD	9 /* multi-disk RAID sets */
-#define MAJOR_XT	13 /* XT-type hard disks */
-#define MAJOR_ACORN	21 /* Acorn MFM controller */
-#define MAJOR_IDE2	22 /* IDE on second interface */
-#define MAJOR_IDE3	33 /* IDE on third interface */
-#define MAJOR_IDE4	34 /* IDE on fourth interface */
-#define MAJOR_ESDI	36 /* PS/2 ESDI drives */
-#define MAJOR_FTL	44 /* Flash Transition Layer on Memory Technology Device */
-#define MAJOR_PP	45 /* Parallel Port IDE drive */
-#define MAJOR_PPFD	47 /* Parallel Port floppy drive */
-#define MAJOR_DAC960	48 /* First Mylex DAC960 PCI RAID controller */
-#if !BETA_TEST || 1
-#define MAJOR_IDE5	56 /* IDE on fifth interface */
-#endif
-#define MAJOR_IDE6	57 /* IDE on sixth interface */
-#define MAJOR_LVM	58 /* Logical Volume Manager block device */
-#define MAJOR_EXPR	60 /* Experimental devices 60..63 */
-/*#define MAJOR_FL	62 / M-Systems Disk-On-Chip 2000 ***experimental*** */
+#define MAJOR_EMD_SORT   2    /*** Convert MAJOR_EMD to this for sorting ***/
+#define MAJOR_HPT370_SORT 2   /*** Convert MAJOR_HPT370 to this for sorting ***/
+#define MAJOR_FD         2    /* floppy disks               (dev/fd..) */
+#define MAJOR_HD         3    /* first IDE hard disk iface  (/dev/hd..) */
+#define MAJOR_LOOP       7    /* loopback devices 0-15      (dev/loop..) */
+#define MAJOR_SD         8    /* SCSI disks 0-15            (dev/sd..) */
+#define MAJOR_MD         9    /* metadisk RAID devices      (/dev/md..) */
+#define MAJOR_XT        13    /* XT hard disks drives  (deleted since kernel v3.9) */
+#define MAJOR_ACORN     21    /* Acorn MFM hard drives      (/dev/mfm..) */
+#define MAJOR_IDE2      22    /* second IDE hard disk iface (/dev/hd..) */
+#define MAJOR_IDE3      33    /* third  IDE hard disk iface (/dev/hd..) */
+#define MAJOR_IDE4      34    /* fourth IDE hard disk iface (/dev/hd..) */
+#define MAJOR_ESDI      36    /* PS/2 ESDI hard disk drives  (obsolete) */
+#define MAJOR_FTL       44    /* Flash Transition Layer on Memory Technology Device */
+#define MAJOR_PP        45    /* Parallel Port IDE disk devices (/dev/pd..) */
+#define MAJOR_PPFD      47    /* Parallel Port ATAPI floppy drive (/dev/pf..) */
+#define MAJOR_DAC960    48    /* First Mylex DAC960 PCI RAID iface (/dev/rd/c0..) */
+#define MAJOR_IDE5      56    /* fifth IDE hard disk iface  (/dev/hd..) */
+#define MAJOR_IDE6      57    /* sixth IDE hard disk iface  (/dev/hd..) */
+#define MAJOR_LVM       58    /* Logical Volume Manager block device */
+#define MAJOR_EXPR      60    /* Experimental devices (without official numbers) */
 
-#define MAJOR_SD_SORT	64 /*** MAJOR_SD converted to this for sorting ***/
-#define MAJOR_SD2	65 /* SCSI disks 16-31 */
-#define MAJOR_SD3	66 /* SCSI disks 32-47 */
-#define MAJOR_SD4	67 /* SCSI disks 48-63 */
-#define MAJOR_SD5	68 /* SCSI disks 64-79 */
-#define MAJOR_SD6	69 /* SCSI disks 80-95 */
-#define MAJOR_SD7	70 /* SCSI disks 96-111 */
-#define MAJOR_SD8	71 /* SCSI disks 112-127 */
-#define MAJOR_SMART2	72 /* First Compaq Smart/2 Major 72-79 */
-#define MAJOR_I2O	80  /* First I2O block device 80-87 */
-#define MAJOR_IDE7	88 /* IDE on seventh interface */
-#define MAJOR_IDE8	89 /* IDE on eighth interface */
-#define MAJOR_IDE9	90 /* IDE on ninth interface */
-#define MAJOR_IDE10	91 /* IDE on tenth interface */
-#define MAJOR_PPDD	92 /* PPDD encrypted disks - not supported */
-#define MAJOR_NFTL	93 /* NAND Flash Translation Layer (Disk-On-Chip) */
-#define MAJOR_DOC	100 /* Disk-On-Chip driver */
-#define MAJOR_AMI_HYP	101 /* AMI Hyper Disk RAID controller */
-#define MAJOR_CISS	104 /* First CCISS Major 104-111 */
-#define MAJOR_IBM_iSER	112 /* IBM iSeries virtual disk */
-#define MAJOR_HPT370	114 /* HPT370 controller */
-#define MAJOR_EVMS	117 /* Enterprise Volume Management System */
-#define MAJOR_SD9	128 /* SCSI disks 129     */
-#define MAJOR_SD16	135 /* SCSI disks    -255 */
-#define MAJOR_DAC960_8	136 /* Ninth Mylex DAC960 PCI RAID controller */
-#define MAJOR_EMD	153 /* Enhanced multi-disk RAID sets */
-#define MAJOR_CARM1	160 /* Carmel SATA Disk on first 8-port controller */
-#define MAJOR_CARM2	161 /* Carmel SATA Disk on 2nd 8-port controller */
+#define MAJOR_SD_SORT   64    /*** MAJOR_SD converted to this for sorting ***/
+#define MAJOR_SD2       65    /* SCSI disks 16-31           (/dev/sd..) */
+#define MAJOR_SD3       66    /* SCSI disks 32-47           (/dev/sd..) */
+#define MAJOR_SD4       67    /* SCSI disks 48-63           (/dev/sd..) */
+#define MAJOR_SD5       68    /* SCSI disks 64-79           (/dev/sd..) */
+#define MAJOR_SD6       69    /* SCSI disks 80-95           (/dev/sd..) */
+#define MAJOR_SD7       70    /* SCSI disks 96-111          (/dev/sd..) */
+#define MAJOR_SD8       71    /* SCSI disks 112-127         (/dev/sd..) */
+#define MAJOR_SMART2    72    /* First Compaq Smart/2 iface (/dev/ida/c1d..) */
+#define MAJOR_I2O       80    /* First I2O hard disk iface  (/dev/i2o/hd..) */
+#define MAJOR_IDE7      88    /* Seventh IDE hard disk iface (/dev/hd..) */
+#define MAJOR_IDE8      89    /* Eighth IDE hard disk iface (/dev/hd..) */
+#define MAJOR_IDE9      90    /* Ninth IDE hard disk iface (/dev/hd..) */
+#define MAJOR_IDE10     91    /* Tenth IDE hard disk iface (/dev/hd..) */
+#define MAJOR_PPDD      92    /* PPDD encrypted disks  (not supported) */
+#define MAJOR_NFTL      93    /* NAND Flash Translation Layer (Disk-On-Chip) */
+#define MAJOR_DOC      100    /* Disk-On-Chip driver  (obsolete) */
+#define MAJOR_AMI_HYP  101    /* AMI Hyper Disk RAID controller */
+#define MAJOR_CISS     104    /* First CCISS Drive Array iface  (/dev/cciss/c0..) */
+#define MAJOR_IBM_ISER 112    /* IBM iSeries virtual disk   (/dev/iseries/vd..) */
+#define MAJOR_HPT370   114    /* Software RAID interfaces e.g.HPT370 (/dev/ataraid/..) */
+#define MAJOR_EVMS     117    /* Enterprise Volume Management System (/dev/evms/EVM..) */
+#define MAJOR_SD9      128    /* SCSI disks 128 -         (/dev/sd..) */
+#define MAJOR_SD16     135    /* SCSI disks      -255     (/dev/sd..) */
+#define MAJOR_DAC960_8 136    /* Ninth Mylex DAC960 PCI RAID iface */
+#define MAJOR_EMD      153    /* Enhanced multi-disk RAID sets (/dev/emd/..) */
+#define MAJOR_CARM1    160    /* First Carmel SATA Disk controller (/dev/carmel/..) */
+#define MAJOR_CARM2    161    /* Second Carmel SATA Disk controller (/dev/carmel/..) */
 
 /* don't use the following */
-#define MAJOR_MDP	254 /* Enhanced multi-disk RAID sets [experimental?] */
+#define MAJOR_MDP      254    /* Enhanced multi-disk RAID sets [experimental] */
 
 /* high partitions (>15) on SATA hard disks */
-#define MAJOR_SATA1	259 /* high SATA disk partitions */
-#define MAJOR_SATA2	260 /* high SATA disk partitions */
+#define MAJOR_SATA1    259    /* high SATA disk partitions (Block Extended Major) */
+#define MAJOR_SATA2    260    /* high SATA disk partitions (Block Extended Major) (obsolete) */
 
-#define MAX_TOKEN	1023 /* max device Token length */
-#define MAX_IMAGE_NAME	15 /* maximum name length (w/o terminating NUL) */
-#define MAX_DESCR_SECTORS  12  /* upper limit on MAX_DESCR_SECS */
+#define MAX_TOKEN     1023    /* max device Token length */
+#define MAX_IMAGE_NAME  15    /* maximum name length (w/o terminating NUL) */
+#define MAX_DESCR_SECTORS 12  /* upper limit on MAX_DESCR_SECS */
 
 #ifdef LCF_PASS160
 #undef SHS_PASSWORDS
-#define SHS_PASSWORDS		/* use this one if SHS passwords are in use */
-#define MAX_PW_CRC	5  	/* max # of longwords in password digest */
-#define PW_FILE_SUFFIX ".shs"  	/* suffix for the file that saves password digest */
+#define SHS_PASSWORDS         /* use this one if SHS passwords are in use */
+#define MAX_PW_CRC       5    /* max # of longwords in password digest */
+#define PW_FILE_SUFFIX ".shs" /* suffix for the file that saves password digest */
 #else
-#define CRC_PASSWORDS		/* use this one if CRC passwords are in use */
-#define MAX_PW_CRC	2  	/* max # of CRC-32's in password */
-#define PW_FILE_SUFFIX ".crc"  	/* suffix for the file that saves password CRC's */
+#define CRC_PASSWORDS         /* use this one if CRC passwords are in use */
+#define MAX_PW_CRC       2    /* max # of CRC-32's in password */
+#define PW_FILE_SUFFIX ".crc" /* suffix for the file that saves password CRC's */
 #endif
 
 #ifdef LCF_DSECS
