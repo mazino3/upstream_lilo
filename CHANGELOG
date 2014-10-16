@@ -1,5 +1,9 @@
 Changes for version 24.1 (unreleased) - Joachim Wiedorn
 
+  Documentations
+  --------------
+    - Add more information about -R option (one-time command-line).
+
   Sources
   -------
     - Only warn if founded bad partition (src/partition.c).
