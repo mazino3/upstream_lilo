@@ -62,7 +62,7 @@ the Free Software Foundation; either version 2 of the License, or
 
 B<lilo-uuid-diskid> was written by Joachim Wiedorn.
 
-This manual page was written by Joachim Wiedorn <ad_debian at joonet.de>.
+This manual page was written by Joachim Wiedorn <joodevel at joonet.de>.
 
 =head1 SEE ALSO
 
