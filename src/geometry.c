@@ -281,7 +281,7 @@ int has_partitions_beta(dev_t dev)
     int major = MAJOR(dev);
     
     if  (
-        major == MAJOR_HD ||
+        major == MAJOR_IDE ||
         major == MAJOR_IDE2 ||
         major == MAJOR_IDE3 ||
         major == MAJOR_IDE4 ||
@@ -301,7 +301,7 @@ int has_partitions_beta(dev_t dev)
         major == MAJOR_HPT370 ||
         (major >= MAJOR_EXPR && major <= MAJOR_EXPR+3) ||
         (major >= MAJOR_I2O && major <= MAJOR_I2O+7) ||
-        (major >= MAJOR_SMART2 && major <= MAJOR_SMART2+7) ||
+        (major >= MAJOR_SMART && major <= MAJOR_SMART+7) ||
         (major >= MAJOR_CISS && major <= MAJOR_CISS+7) ||
         major == MAJOR_FTL ||
         major == MAJOR_NFTL ||
@@ -316,9 +316,9 @@ int has_partitions_beta(dev_t dev)
         )  return 0xFFFFFFE0;	/* 5 bit partition mask */
 
     if  (
-        major == MAJOR_IBM_iSER ||
-        (major >= MAJOR_DAC960 && major <= MAJOR_DAC960+7) ||
-        (major >= MAJOR_DAC960_8 && major <= MAJOR_DAC960_8+7)
+        major == MAJOR_IBM_ISER ||
+        (major >= MAJOR_DAC && major <= MAJOR_DAC+7) ||
+        (major >= MAJOR_DAC_8 && major <= MAJOR_DAC_8+7)
         )  return 0xFFFFFFF8;	/* 3 bit partition mask */
 
     return 0;
@@ -647,7 +647,7 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	    geo->sectors = fdprm.sect;
 	    geo->start = 0;
 	    break;
-	case MAJOR_HD:
+	case MAJOR_IDE:
 	case MAJOR_IDE2:
 	case MAJOR_IDE3:
 	case MAJOR_IDE4:
@@ -664,7 +664,7 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	case MAJOR_ACORN:
 	MASK63:
 	    geo->device = 0x80 + (MINOR(device) >> 6) +
-		    (MAJOR(device) == MAJOR_HD ? 0 : last_dev(MAJOR_HD,64));
+		    (MAJOR(device) == MAJOR_IDE ? 0 : last_dev(MAJOR_IDE,64));
 	    if (!get_all) break;
 	    if (ioctl(fd,HDIO_GETGEO,&hdprm) < 0)
 		die("geo_query_dev HDIO_GETGEO (dev 0x%04x): %s",device,
@@ -683,7 +683,7 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	case MAJOR_SD7:
 	case MAJOR_SD8:
 	MASK15:
-	    geo->device = 0x80 + last_dev(MAJOR_HD,64) + (MINOR(device) >> 4);
+	    geo->device = 0x80 + last_dev(MAJOR_IDE,64) + (MINOR(device) >> 4);
 	    if (!get_all) break;
 	    if (ioctl(fd,HDIO_GETGEO,&hdprm) < 0)
 		die("geo_query_dev HDIO_GETGEO (dev 0x%04x): %s",device,
@@ -705,7 +705,7 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 		die("Sorry, cannot handle device 0x%04x",device);
 	    break;
 	MASK31:
-	    geo->device = 0x80 + last_dev(MAJOR_HD,64) + (MINOR(device) >> 5);
+	    geo->device = 0x80 + last_dev(MAJOR_IDE,64) + (MINOR(device) >> 5);
 	    if (!get_all) break;
 	    if (ioctl(fd,HDIO_GETGEO,&hdprm) < 0)
 		die("geo_query_dev HDIO_GETGEO (dev 0x%04x): %s",device,
@@ -718,17 +718,17 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	    geo->sectors = hdprm.sectors;
 	    geo->start = hdprm.start;
 	    break;
-	case MAJOR_DAC960:
-	case MAJOR_DAC960+1:
-	case MAJOR_DAC960+2:
-	case MAJOR_DAC960+3:
-	case MAJOR_DAC960+4:
-	case MAJOR_DAC960+5:
-	case MAJOR_DAC960+6:
-	case MAJOR_DAC960+7:
-	case MAJOR_IBM_iSER:
+	case MAJOR_DAC:
+	case MAJOR_DAC+1:
+	case MAJOR_DAC+2:
+	case MAJOR_DAC+3:
+	case MAJOR_DAC+4:
+	case MAJOR_DAC+5:
+	case MAJOR_DAC+6:
+	case MAJOR_DAC+7:
+	case MAJOR_IBM_ISER:
 	MASK7:
-	    geo->device = 0x80 + last_dev(MAJOR_HD,64) + (MINOR(device) >> 3);
+	    geo->device = 0x80 + last_dev(MAJOR_IDE,64) + (MINOR(device) >> 3);
 	    if (!get_all) break;
 	    if (ioctl(fd,HDIO_GETGEO,&hdprm) < 0)
 		die("geo_query_dev HDIO_GETGEO (dev 0x%04x): %s",device,
@@ -750,14 +750,14 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	case MAJOR_FTL:
 	case MAJOR_NFTL:
 	case MAJOR_DOC:
-	case MAJOR_SMART2+0:
-	case MAJOR_SMART2+1:
-	case MAJOR_SMART2+2:
-	case MAJOR_SMART2+3:
-	case MAJOR_SMART2+4:
-	case MAJOR_SMART2+5:
-	case MAJOR_SMART2+6:
-	case MAJOR_SMART2+7:
+	case MAJOR_SMART+0:
+	case MAJOR_SMART+1:
+	case MAJOR_SMART+2:
+	case MAJOR_SMART+3:
+	case MAJOR_SMART+4:
+	case MAJOR_SMART+5:
+	case MAJOR_SMART+6:
+	case MAJOR_SMART+7:
 	case MAJOR_CISS+0:
 	case MAJOR_CISS+1:
 	case MAJOR_CISS+2:
@@ -774,7 +774,7 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	case MAJOR_I2O+5:
 	case MAJOR_I2O+6:
 	case MAJOR_I2O+7:
-	    geo->device = 0x80 + last_dev(MAJOR_HD,64) + (MINOR(device) >> 4);
+	    geo->device = 0x80 + last_dev(MAJOR_IDE,64) + (MINOR(device) >> 4);
 	    if (!get_all) break;
 	    if (ioctl(fd,HDIO_GETGEO,&hdprm) < 0)
 		die("geo_query_dev HDIO_GETGEO (dev 0x%04x): %s",device,
@@ -822,7 +822,7 @@ int is_first(int device)
 	case MAJOR_FD:
 	    return !(device & 3);
 
-	case MAJOR_HD:
+	case MAJOR_IDE:
 	    return !(MINOR(device) >> 6);
 
 	case MAJOR_IDE2:
@@ -838,7 +838,7 @@ int is_first(int device)
 	case MAJOR_IDE10:
 	case MAJOR_ESDI:
 	case MAJOR_XT:
-	    return MINOR(device) >> 6 ? 0 : !last_dev(MAJOR_HD,64);
+	    return MINOR(device) >> 6 ? 0 : !last_dev(MAJOR_IDE,64);
 
 	case MAJOR_SD:
 	case MAJOR_SD2:
@@ -856,14 +856,14 @@ int is_first(int device)
 	case MAJOR_EXPR+3:
 	case MAJOR_NFTL:
 	case MAJOR_DOC:
-	case MAJOR_SMART2+0:
-	case MAJOR_SMART2+1:
-	case MAJOR_SMART2+2:
-	case MAJOR_SMART2+3:
-	case MAJOR_SMART2+4:
-	case MAJOR_SMART2+5:
-	case MAJOR_SMART2+6:
-	case MAJOR_SMART2+7:
+	case MAJOR_SMART+0:
+	case MAJOR_SMART+1:
+	case MAJOR_SMART+2:
+	case MAJOR_SMART+3:
+	case MAJOR_SMART+4:
+	case MAJOR_SMART+5:
+	case MAJOR_SMART+6:
+	case MAJOR_SMART+7:
 	case MAJOR_CISS+0:
 	case MAJOR_CISS+1:
 	case MAJOR_CISS+2:
@@ -880,18 +880,18 @@ int is_first(int device)
 	case MAJOR_I2O+5:
 	case MAJOR_I2O+6:
 	case MAJOR_I2O+7:
-	    return MINOR(device) >> 4 ? 0 : !last_dev(MAJOR_HD,64);
+	    return MINOR(device) >> 4 ? 0 : !last_dev(MAJOR_IDE,64);
 
-	case MAJOR_DAC960:
-	case MAJOR_DAC960+1:
-	case MAJOR_DAC960+2:
-	case MAJOR_DAC960+3:
-	case MAJOR_DAC960+4:
-	case MAJOR_DAC960+5:
-	case MAJOR_DAC960+6:
-	case MAJOR_DAC960+7:
-	case MAJOR_IBM_iSER:
-	    return MINOR(device) >> 3 ? 0 : !last_dev(MAJOR_HD,64);
+	case MAJOR_DAC:
+	case MAJOR_DAC+1:
+	case MAJOR_DAC+2:
+	case MAJOR_DAC+3:
+	case MAJOR_DAC+4:
+	case MAJOR_DAC+5:
+	case MAJOR_DAC+6:
+	case MAJOR_DAC+7:
+	case MAJOR_IBM_ISER:
+	    return MINOR(device) >> 3 ? 0 : !last_dev(MAJOR_IDE,64);
 
 	default:
 	    return 1; /* user knows what (s)he's doing ... I hope */

@@ -2,7 +2,7 @@
  * 
  * Copyright 1992-1997 Werner Almesberger
  * Copyright 1999-2006 John Coffman
- * Copyright 2009-2011 Joachim Wiedorn
+ * Copyright 2009-2014 Joachim Wiedorn
  * All rights reserved.
  * 
  * Licensed under the terms contained in the file 'COPYING'
@@ -347,7 +347,6 @@ void preload_dev_cache(void)
 	cache_add(DEV_DIR "/fd1", 0x0201);
     }
     
-#if 1
     cache_ide(DEV_DISK_DIR "/hdt", MAJOR_IDE10);
     cache_ide(DEV_DISK_DIR "/hds", MAJOR_IDE10);
     cache_ide(DEV_DISK_DIR "/hdr", MAJOR_IDE9);
@@ -360,11 +359,9 @@ void preload_dev_cache(void)
     
     cache_ide(DEV_DISK_DIR "/hdl", MAJOR_IDE6);
     cache_ide(DEV_DISK_DIR "/hdk", MAJOR_IDE6);
-#ifdef MAJOR_IDE5
+
     cache_ide(DEV_DISK_DIR "/hdj", MAJOR_IDE5);
     cache_ide(DEV_DISK_DIR "/hdi", MAJOR_IDE5);
-#endif
-#endif
     
     for (i = MAX; i >= 0; i--) {
 	sprintf(tmp, is_devfs() ? DEV_DISK_DIR "/md/%d" : DEV_DISK_DIR "/md%d", i);
@@ -385,8 +382,8 @@ void preload_dev_cache(void)
 
     cache_ide(DEV_DISK_DIR "/hdd", MAJOR_IDE2);
     cache_ide(DEV_DISK_DIR "/hdc", MAJOR_IDE2);
-    cache_ide(DEV_DISK_DIR "/hdb", MAJOR_HD);
-    cache_ide(DEV_DISK_DIR "/hda", MAJOR_HD);
+    cache_ide(DEV_DISK_DIR "/hdb", MAJOR_IDE);
+    cache_ide(DEV_DISK_DIR "/hda", MAJOR_IDE);
     
     verbose = vsave;
 }
