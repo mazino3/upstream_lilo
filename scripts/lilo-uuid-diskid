@@ -3,7 +3,7 @@
 #       lilo-uuid-diskid - convert boot and root options to diskid
 #                          and uuid in /etc/lilo.conf
 #
-#       Copyright 2010-2014 Joachim Wiedorn <ad_debian at joonet.de>
+#       Copyright 2010-2014 Joachim Wiedorn <joodevel at joonet.de>
 #       
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -475,7 +475,7 @@ the Free Software Foundation; either version 2 of the License, or
 
 B<lilo-uuid-diskid> was written by Joachim Wiedorn.
 
-This manual page was written by Joachim Wiedorn <ad_debian at joonet.de>.
+This manual page was written by Joachim Wiedorn <joodevel at joonet.de>.
 
 =head1 SEE ALSO
 

@@ -1,4 +1,11 @@
 # -*- makefile -*-
+#
+# Copyright 2009-2014 Joachim Wiedorn
+# All rights reserved.
+# 
+# Licensed under the terms contained in the file 'COPYING'
+# in the source directory.
+#
 
 # adding variables
 include ../make.vars

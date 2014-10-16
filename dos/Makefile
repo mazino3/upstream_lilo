@@ -1,4 +1,11 @@
 # -*- makefile -*-
+#
+# Copyright 2009-2014 Joachim Wiedorn
+# All rights reserved.
+# 
+# Licensed under the terms contained in the file 'COPYING'
+# in the source directory.
+#
 # Makefile for BCC compilation of 'lilo.com'
 #
 # Known to work with BCC version 0.16.15
