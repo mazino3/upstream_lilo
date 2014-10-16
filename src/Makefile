@@ -244,7 +244,7 @@ install:
 
 	strip lilo
 	cp lilo $$DESTDIR$(SBIN_DIR)/lilo
-	if [ -x lilo.static ]; then \
+	if [ -f lilo.static ]; then \
 	  strip lilo.static; \
 	  cp lilo.static $$DESTDIR$(SBIN_DIR)/lilo.static; \
 	fi
