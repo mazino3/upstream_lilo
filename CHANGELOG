@@ -8,10 +8,12 @@ Changes for version 24.1 (unreleased) - Joachim Wiedorn
     - Install lilo.static, too, if existing.
     - Add CFLAGS, CPPFLAGS, LDFLAGS everywhere needed
         (useful e.g. for hardening in Debian).
+    - Add many major device numbers, especially for MMC cards and XVD
+        disks. Remove obsolete numbers (src/lilo.h, src/geometry.c).
 
   General
   -------
-    - Use 'lilo -H' in hook scripts to ignore error on degraded RAID1
+    - Use 'lilo -H' in hook scripts to ignore error on degraded mdadm
         RAID1 systems  (thanks to M. Schnalke).
     - Small update of script lilo-uuid-diskid.
     - Large upgrade of script liloconfig:

@@ -281,7 +281,7 @@ int has_partitions_beta(dev_t dev)
     int major = MAJOR(dev);
     
     if  (
-        major == MAJOR_IDE ||
+        major == MAJOR_IDE  ||
         major == MAJOR_IDE2 ||
         major == MAJOR_IDE3 ||
         major == MAJOR_IDE4 ||
@@ -289,36 +289,40 @@ int has_partitions_beta(dev_t dev)
         major == MAJOR_IDE6 ||
         major == MAJOR_EMD  ||
         (major >= MAJOR_IDE7 && major <= MAJOR_IDE10) ||
-        major == MAJOR_XT ||
+        major == MAJOR_XT   ||
         major == MAJOR_ESDI ||
         major == MAJOR_ACORN
         ) return 0xFFFFFFC0;	/* 6 bit partition mask */
       
-    if  (
-        major == MAJOR_SD ||
-        (major >= MAJOR_SD2 && major <= MAJOR_SD8) ||
-        major == MAJOR_AMI_HYP ||
-        major == MAJOR_HPT370 ||
-        (major >= MAJOR_EXPR && major <= MAJOR_EXPR+3) ||
-        (major >= MAJOR_I2O && major <= MAJOR_I2O+7) ||
-        (major >= MAJOR_SMART && major <= MAJOR_SMART+7) ||
-        (major >= MAJOR_CISS && major <= MAJOR_CISS+7) ||
-        major == MAJOR_FTL ||
-        major == MAJOR_NFTL ||
-        major == MAJOR_DOC ||
-        (major >= MAJOR_SD9 && major <= MAJOR_SD16) ||
-        (major >= MAJOR_SATA1 && major <= MAJOR_SATA2)
-        ) return 0xFFFFFFF0;	/* 4 bit partition mask */
-
     if  (
         major == MAJOR_CARM1 ||
         major == MAJOR_CARM2
         )  return 0xFFFFFFE0;	/* 5 bit partition mask */
 
     if  (
+        major == MAJOR_SD   ||
+        (major >= MAJOR_SD2 && major <= MAJOR_SD8) ||
+        (major >= MAJOR_SD9 && major <= MAJOR_SD16) ||
+        major == MAJOR_AMI  ||
+        major == MAJOR_HPT370 ||
+        (major >= MAJOR_EXPR && major <= MAJOR_EXPR4) ||
+        (major >= MAJOR_EXPR5 && major <= MAJOR_EXPR12) ||
+        (major >= MAJOR_I2O && major <= MAJOR_I2O7) ||
+        (major >= MAJOR_SMART && major <= MAJOR_SMART8) ||
+        (major >= MAJOR_CISS && major <= MAJOR_CISS8) ||
+        major == MAJOR_FTL  ||
+        major == MAJOR_NFTL ||
+        major == MAJOR_DOC  ||
+        major == MAJOR_PP   ||
+        major == MAJOR_PPCD ||
+        major == MAJOR_PPFD ||
+        (major >= MAJOR_SATA1 && major <= MAJOR_SATA2)
+        ) return 0xFFFFFFF0;	/* 4 bit partition mask */
+
+    if  (
         major == MAJOR_IBM_ISER ||
-        (major >= MAJOR_DAC && major <= MAJOR_DAC+7) ||
-        (major >= MAJOR_DAC_8 && major <= MAJOR_DAC_8+7)
+        (major >= MAJOR_DAC && major <= MAJOR_DAC8) ||
+        (major >= MAJOR_DAC9 && major <= MAJOR_DAC16)
         )  return 0xFFFFFFF8;	/* 3 bit partition mask */
 
     return 0;
@@ -647,21 +651,19 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	    geo->sectors = fdprm.sect;
 	    geo->start = 0;
 	    break;
+	case MAJOR_ACORN:
+	case MAJOR_ESDI:
 	case MAJOR_IDE:
 	case MAJOR_IDE2:
 	case MAJOR_IDE3:
 	case MAJOR_IDE4:
-#ifdef MAJOR_IDE5
 	case MAJOR_IDE5:
-#endif
 	case MAJOR_IDE6:
 	case MAJOR_IDE7:
 	case MAJOR_IDE8:
 	case MAJOR_IDE9:
 	case MAJOR_IDE10:
-	case MAJOR_ESDI:
 	case MAJOR_XT:
-	case MAJOR_ACORN:
 	MASK63:
 	    geo->device = 0x80 + (MINOR(device) >> 6) +
 		    (MAJOR(device) == MAJOR_IDE ? 0 : last_dev(MAJOR_IDE,64));
@@ -682,6 +684,15 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	case MAJOR_SD6:
 	case MAJOR_SD7:
 	case MAJOR_SD8:
+	case MAJOR_SD9:
+	case MAJOR_SD10:
+	case MAJOR_SD11:
+	case MAJOR_SD12:
+	case MAJOR_SD13:
+	case MAJOR_SD14:
+	case MAJOR_SD15:
+	case MAJOR_SD16:
+	case MAJOR_XVD:
 	MASK15:
 	    geo->device = 0x80 + last_dev(MAJOR_IDE,64) + (MINOR(device) >> 4);
 	    if (!get_all) break;
@@ -719,14 +730,23 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	    geo->start = hdprm.start;
 	    break;
 	case MAJOR_DAC:
-	case MAJOR_DAC+1:
-	case MAJOR_DAC+2:
-	case MAJOR_DAC+3:
-	case MAJOR_DAC+4:
-	case MAJOR_DAC+5:
-	case MAJOR_DAC+6:
-	case MAJOR_DAC+7:
+	case MAJOR_DAC2:
+	case MAJOR_DAC3:
+	case MAJOR_DAC4:
+	case MAJOR_DAC5:
+	case MAJOR_DAC6:
+	case MAJOR_DAC7:
+	case MAJOR_DAC8:
+	case MAJOR_DAC9:
+	case MAJOR_DAC10:
+	case MAJOR_DAC11:
+	case MAJOR_DAC12:
+	case MAJOR_DAC13:
+	case MAJOR_DAC14:
+	case MAJOR_DAC15:
+	case MAJOR_DAC16:
 	case MAJOR_IBM_ISER:
+    case MAJOR_MMC:
 	MASK7:
 	    geo->device = 0x80 + last_dev(MAJOR_IDE,64) + (MINOR(device) >> 3);
 	    if (!get_all) break;
@@ -741,39 +761,50 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	    geo->sectors = hdprm.sectors;
 	    geo->start = hdprm.start;
 	    break;
-	case MAJOR_AMI_HYP:
-	case MAJOR_HPT370:
+	case MAJOR_AMI:
+	case MAJOR_CISS:
+	case MAJOR_CISS2:
+	case MAJOR_CISS3:
+	case MAJOR_CISS4:
+	case MAJOR_CISS5:
+	case MAJOR_CISS6:
+	case MAJOR_CISS7:
+	case MAJOR_CISS8:
+	case MAJOR_DOC:
 	case MAJOR_EXPR:
-	case MAJOR_EXPR+1:
-	case MAJOR_EXPR+2:
-	case MAJOR_EXPR+3:
+	case MAJOR_EXPR2:
+	case MAJOR_EXPR3:
+	case MAJOR_EXPR4:
+	case MAJOR_EXPR5:
+	case MAJOR_EXPR6:
+	case MAJOR_EXPR7:
+	case MAJOR_EXPR8:
+	case MAJOR_EXPR9:
+	case MAJOR_EXPR10:
+	case MAJOR_EXPR11:
+	case MAJOR_EXPR12:
+	case MAJOR_HPT370:
 	case MAJOR_FTL:
 	case MAJOR_NFTL:
-	case MAJOR_DOC:
-	case MAJOR_SMART+0:
-	case MAJOR_SMART+1:
-	case MAJOR_SMART+2:
-	case MAJOR_SMART+3:
-	case MAJOR_SMART+4:
-	case MAJOR_SMART+5:
-	case MAJOR_SMART+6:
-	case MAJOR_SMART+7:
-	case MAJOR_CISS+0:
-	case MAJOR_CISS+1:
-	case MAJOR_CISS+2:
-	case MAJOR_CISS+3:
-	case MAJOR_CISS+4:
-	case MAJOR_CISS+5:
-	case MAJOR_CISS+6:
-	case MAJOR_CISS+7:
 	case MAJOR_I2O:
-	case MAJOR_I2O+1:
-	case MAJOR_I2O+2:
-	case MAJOR_I2O+3:
-	case MAJOR_I2O+4:
-	case MAJOR_I2O+5:
-	case MAJOR_I2O+6:
-	case MAJOR_I2O+7:
+	case MAJOR_I2O2:
+	case MAJOR_I2O3:
+	case MAJOR_I2O4:
+	case MAJOR_I2O5:
+	case MAJOR_I2O6:
+	case MAJOR_I2O7:
+	case MAJOR_I2O8:
+	case MAJOR_PP:
+	case MAJOR_PPCD:
+	case MAJOR_PPFD:
+	case MAJOR_SMART:
+	case MAJOR_SMART2:
+	case MAJOR_SMART3:
+	case MAJOR_SMART4:
+	case MAJOR_SMART5:
+	case MAJOR_SMART6:
+	case MAJOR_SMART7:
+	case MAJOR_SMART8:
 	    geo->device = 0x80 + last_dev(MAJOR_IDE,64) + (MINOR(device) >> 4);
 	    if (!get_all) break;
 	    if (ioctl(fd,HDIO_GETGEO,&hdprm) < 0)
@@ -795,7 +826,8 @@ void geo_query_dev(GEOMETRY *geo,int device,int all)
 	    if (max_partno[major] == 15)  goto MASK15;
 	    if (max_partno[major] == 7)   goto MASK7;
 	    
-	    if ((MAJOR(device)>=120 && MAJOR(device)<=127)  ||
+	    if ((MAJOR(device)>=60 && MAJOR(device)<=63)  ||
+            (MAJOR(device)>=120 && MAJOR(device)<=127) ||
 	        (MAJOR(device)>=240 && MAJOR(device)<=254) )
 		die("Linux experimental device 0x%04x needs to be defined.\n"
 		    "Check 'man lilo.conf' under 'disk=' and 'max-partitions='", device);
@@ -818,6 +850,7 @@ int is_first(int device)
     if (walk && !walk->heads)
 	die("Device 0x%04X: Configured as inaccessible.\n",device);
     if (walk && walk->bios != -1) return !(walk->bios & 0x7f);
+
     switch (MAJOR(device)) {
 	case MAJOR_FD:
 	    return !(device & 3);
@@ -828,9 +861,7 @@ int is_first(int device)
 	case MAJOR_IDE2:
 	case MAJOR_IDE3:
 	case MAJOR_IDE4:
-#ifdef MAJOR_IDE5
 	case MAJOR_IDE5:
-#endif
 	case MAJOR_IDE6:
 	case MAJOR_IDE7:
 	case MAJOR_IDE8:
@@ -848,49 +879,78 @@ int is_first(int device)
 	case MAJOR_SD6:
 	case MAJOR_SD7:
 	case MAJOR_SD8:
-	case MAJOR_AMI_HYP:
-	case MAJOR_HPT370:
-	case MAJOR_EXPR+0:
-	case MAJOR_EXPR+1:
-	case MAJOR_EXPR+2:
-	case MAJOR_EXPR+3:
-	case MAJOR_NFTL:
+	case MAJOR_SD9:
+	case MAJOR_SD10:
+	case MAJOR_SD11:
+	case MAJOR_SD12:
+	case MAJOR_SD13:
+	case MAJOR_SD14:
+	case MAJOR_SD15:
+	case MAJOR_SD16:
+	case MAJOR_XVD:
+	case MAJOR_AMI:
+	case MAJOR_CISS:
+	case MAJOR_CISS2:
+	case MAJOR_CISS3:
+	case MAJOR_CISS4:
+	case MAJOR_CISS5:
+	case MAJOR_CISS6:
+	case MAJOR_CISS7:
+	case MAJOR_CISS8:
 	case MAJOR_DOC:
-	case MAJOR_SMART+0:
-	case MAJOR_SMART+1:
-	case MAJOR_SMART+2:
-	case MAJOR_SMART+3:
-	case MAJOR_SMART+4:
-	case MAJOR_SMART+5:
-	case MAJOR_SMART+6:
-	case MAJOR_SMART+7:
-	case MAJOR_CISS+0:
-	case MAJOR_CISS+1:
-	case MAJOR_CISS+2:
-	case MAJOR_CISS+3:
-	case MAJOR_CISS+4:
-	case MAJOR_CISS+5:
-	case MAJOR_CISS+6:
-	case MAJOR_CISS+7:
+	case MAJOR_HPT370:
+	case MAJOR_EXPR:
+	case MAJOR_EXPR2:
+	case MAJOR_EXPR3:
+	case MAJOR_EXPR4:
+	case MAJOR_EXPR5:
+	case MAJOR_EXPR6:
+	case MAJOR_EXPR7:
+	case MAJOR_EXPR8:
+	case MAJOR_EXPR9:
+	case MAJOR_EXPR10:
+	case MAJOR_EXPR11:
+	case MAJOR_EXPR12:
 	case MAJOR_I2O:
-	case MAJOR_I2O+1:
-	case MAJOR_I2O+2:
-	case MAJOR_I2O+3:
-	case MAJOR_I2O+4:
-	case MAJOR_I2O+5:
-	case MAJOR_I2O+6:
-	case MAJOR_I2O+7:
+	case MAJOR_I2O2:
+	case MAJOR_I2O3:
+	case MAJOR_I2O4:
+	case MAJOR_I2O5:
+	case MAJOR_I2O6:
+	case MAJOR_I2O7:
+	case MAJOR_I2O8:
+	case MAJOR_NFTL:
+	case MAJOR_PP:
+	case MAJOR_PPCD:
+	case MAJOR_PPFD:
+	case MAJOR_SMART:
+	case MAJOR_SMART2:
+	case MAJOR_SMART3:
+	case MAJOR_SMART4:
+	case MAJOR_SMART5:
+	case MAJOR_SMART6:
+	case MAJOR_SMART7:
+	case MAJOR_SMART8:
 	    return MINOR(device) >> 4 ? 0 : !last_dev(MAJOR_IDE,64);
 
 	case MAJOR_DAC:
-	case MAJOR_DAC+1:
-	case MAJOR_DAC+2:
-	case MAJOR_DAC+3:
-	case MAJOR_DAC+4:
-	case MAJOR_DAC+5:
-	case MAJOR_DAC+6:
-	case MAJOR_DAC+7:
+	case MAJOR_DAC2:
+	case MAJOR_DAC3:
+	case MAJOR_DAC4:
+	case MAJOR_DAC5:
+	case MAJOR_DAC6:
+	case MAJOR_DAC7:
+	case MAJOR_DAC8:
+	case MAJOR_DAC9:
+	case MAJOR_DAC10:
+	case MAJOR_DAC11:
+	case MAJOR_DAC12:
+	case MAJOR_DAC13:
+	case MAJOR_DAC14:
+	case MAJOR_DAC15:
+	case MAJOR_DAC16:
 	case MAJOR_IBM_ISER:
+	case MAJOR_MMC:
 	    return MINOR(device) >> 3 ? 0 : !last_dev(MAJOR_IDE,64);
 
 	default:
@@ -1114,6 +1174,7 @@ void geo_get(GEOMETRY *geo,int device,int user_device,int all)
 	md_array_info_t md_array_info;
 	md_disk_info_t md_disk_info;
 	int raid_limit;
+	raid_limit = 0;
 
 	sprintf(mdxxx, DEV_DISK_DIR "/md%d", MINOR(device));
 	if ((md_fd=open(mdxxx,O_NOACCESS)) < 0)
