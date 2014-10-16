@@ -2,7 +2,7 @@
  * 
  * Copyright 1992-1998 Werner Almesberger
  * Copyright 1999-2005 John Coffman
- * Copyright 2009-2011 Joachim Wiedorn
+ * Copyright 2009-2014 Joachim Wiedorn
  * All rights reserved.
  * 
  * Licensed under the terms contained in the file 'COPYING'
@@ -280,33 +280,45 @@ int has_partitions_beta(dev_t dev)
 {
     int major = MAJOR(dev);
     
-    if (
-      major == MAJOR_HD || major == MAJOR_IDE2 ||
-      major == MAJOR_IDE3 || major == MAJOR_IDE4 ||
-      major == MAJOR_IDE5 || major == MAJOR_IDE6 ||
-      major == MAJOR_EMD  ||
-      (major >= MAJOR_IDE7 && major <= MAJOR_IDE10) ||
-      major == MAJOR_XT || major == MAJOR_ESDI || major == MAJOR_ACORN
-      	) return 0xFFFFFFC0;	/* 6 bit partition mask */
+    if  (
+        major == MAJOR_HD ||
+        major == MAJOR_IDE2 ||
+        major == MAJOR_IDE3 ||
+        major == MAJOR_IDE4 ||
+        major == MAJOR_IDE5 ||
+        major == MAJOR_IDE6 ||
+        major == MAJOR_EMD  ||
+        (major >= MAJOR_IDE7 && major <= MAJOR_IDE10) ||
+        major == MAJOR_XT ||
+        major == MAJOR_ESDI ||
+        major == MAJOR_ACORN
+        ) return 0xFFFFFFC0;	/* 6 bit partition mask */
       
-    if (
-      major == MAJOR_SD || (major >= MAJOR_SD2 && major <= MAJOR_SD8) ||
-      major == MAJOR_AMI_HYP || major == MAJOR_HPT370 ||
-      (major >= MAJOR_EXPR && major <= MAJOR_EXPR+3) ||
-      (major >= MAJOR_I2O && major <= MAJOR_I2O+7) ||
-      (major >= MAJOR_SMART2 && major <= MAJOR_SMART2+7) ||
-      (major >= MAJOR_CISS && major <= MAJOR_CISS+7) ||
-      major == MAJOR_FTL || major == MAJOR_NFTL || major == MAJOR_DOC ||
-      (major >= MAJOR_SD9 && major <= MAJOR_SD16) ||
-      (major >= MAJOR_SATA1 && major <= MAJOR_SATA2)
+    if  (
+        major == MAJOR_SD ||
+        (major >= MAJOR_SD2 && major <= MAJOR_SD8) ||
+        major == MAJOR_AMI_HYP ||
+        major == MAJOR_HPT370 ||
+        (major >= MAJOR_EXPR && major <= MAJOR_EXPR+3) ||
+        (major >= MAJOR_I2O && major <= MAJOR_I2O+7) ||
+        (major >= MAJOR_SMART2 && major <= MAJOR_SMART2+7) ||
+        (major >= MAJOR_CISS && major <= MAJOR_CISS+7) ||
+        major == MAJOR_FTL ||
+        major == MAJOR_NFTL ||
+        major == MAJOR_DOC ||
+        (major >= MAJOR_SD9 && major <= MAJOR_SD16) ||
+        (major >= MAJOR_SATA1 && major <= MAJOR_SATA2)
         ) return 0xFFFFFFF0;	/* 4 bit partition mask */
 
-    if ( major == MAJOR_CARM1 || major == MAJOR_CARM2
+    if  (
+        major == MAJOR_CARM1 ||
+        major == MAJOR_CARM2
         )  return 0xFFFFFFE0;	/* 5 bit partition mask */
 
-    if ( major == MAJOR_IBM_iSER ||
-      (major >= MAJOR_DAC960 && major <= MAJOR_DAC960+7) ||
-      (major >= MAJOR_DAC960_8 && major <= MAJOR_DAC960_8+7)
+    if  (
+        major == MAJOR_IBM_iSER ||
+        (major >= MAJOR_DAC960 && major <= MAJOR_DAC960+7) ||
+        (major >= MAJOR_DAC960_8 && major <= MAJOR_DAC960_8+7)
         )  return 0xFFFFFFF8;	/* 3 bit partition mask */
 
     return 0;
