@@ -2,7 +2,7 @@
  * 
  * Copyright 1992-1998 Werner Almesberger
  * Copyright 1999-2006 John Coffman
- * Copyright 2009-2013 Joachim Wiedorn
+ * Copyright 2009-2014 Joachim Wiedorn
  * All rights reserved.
  * 
  * Licensed under the terms contained in the file 'COPYING'
@@ -90,34 +90,70 @@
 #endif
 
 
-/* the known major device numbers */
+/* the known major device numbers of block devices */
+/* see: linux-3.xx/Documentation/devices.txt */
 #define MAJMIN_RAM	    0x101 /* RAM disk */
+
 #ifdef LCF_MDPRAID
 #define MAJOR_MDP_SORT   1    /*** Convert MAJOR_MDP to this for sorting ***/
 #endif
 #define MAJOR_EMD_SORT   2    /*** Convert MAJOR_EMD to this for sorting ***/
 #define MAJOR_HPT370_SORT 2   /*** Convert MAJOR_HPT370 to this for sorting ***/
+
 #define MAJOR_FD         2    /* floppy disks               (dev/fd..) */
-#define MAJOR_HD         3    /* first IDE hard disk iface  (/dev/hd..) */
+#define MAJOR_IDE        3    /* first IDE hard disk iface  (/dev/hd..) */
 #define MAJOR_LOOP       7    /* loopback devices 0-15      (dev/loop..) */
 #define MAJOR_SD         8    /* SCSI disks 0-15            (dev/sd..) */
 #define MAJOR_MD         9    /* metadisk RAID devices      (/dev/md..) */
+
+#define MAJOR_SCD       11    /* SCSI CD-ROM devices        (/dev/scd..) */
 #define MAJOR_XT        13    /* XT hard disks drives  (deleted since kernel v3.9) */
+#define MAJOR_SONY      15    /* Sony CDU-31A/CDU-33A CD-ROM (/dev/sonycd) */
+#define MAJOR_GSCD      16    /* GoldStar CD-ROM            (/dev/gscd) */
+#define MAJOR_OPT       17    /* Optics Storage CD-ROM      (/dev/optcd) */
+#define MAJOR_SJCD      18    /* Sanyo CD-ROM               (/dev/sjcd) */
+#define MAJOR_HIT       20    /* Hitachi CD-ROM             (/dev/hitcd) */
+
 #define MAJOR_ACORN     21    /* Acorn MFM hard drives      (/dev/mfm..) */
 #define MAJOR_IDE2      22    /* second IDE hard disk iface (/dev/hd..) */
+
+#define MAJOR_CDU       24    /* Sony CDU-535 CD-ROM        (/dev/cdu535) */
+#define MAJOR_MAT       25    /* First Matsushita CD-ROM    (/dev/sbpcd..) */
+#define MAJOR_MAT2      26    /* Second Matsushita CD-ROM   (/dev/sbpcd..) */
+#define MAJOR_MAT3      27    /* Third Matsushita CD-ROM    (/dev/sbpcd..) */
+#define MAJOR_MAT4      28    /* Fourth Matsushita CD-ROM   (/dev/sbpcd..) */
+#define MAJOR_CM205     30    /* Philips LMS CM-205 CD-ROM  (/dev/cm205cd) */
+#define MAJOR_CM206     32    /* Philips LMS CM-206 CD-ROM  (/dev/cm206cd) */
+
 #define MAJOR_IDE3      33    /* third  IDE hard disk iface (/dev/hd..) */
 #define MAJOR_IDE4      34    /* fourth IDE hard disk iface (/dev/hd..) */
+
 #define MAJOR_ESDI      36    /* PS/2 ESDI hard disk drives  (obsolete) */
 #define MAJOR_FTL       44    /* Flash Transition Layer on Memory Technology Device */
 #define MAJOR_PP        45    /* Parallel Port IDE disk devices (/dev/pd..) */
+#define MAJOR_PPCD      46    /* Parallel Port ATAPI CD-ROM devices (/dev/pcd..) */
 #define MAJOR_PPFD      47    /* Parallel Port ATAPI floppy drive (/dev/pf..) */
-#define MAJOR_DAC960    48    /* First Mylex DAC960 PCI RAID iface (/dev/rd/c0..) */
+
+#define MAJOR_DAC       48    /* First Mylex DAC960 PCI RAID iface  (/dev/rd/c0..) */
+#define MAJOR_DAC2      49    /* Second Mylex DAC960 PCI RAID iface (/dev/rd/c1..) */
+#define MAJOR_DAC3      50    /* Third Mylex DAC960 PCI RAID iface  (/dev/rd/c2..) */
+#define MAJOR_DAC4      51    /* Fourth Mylex DAC960 PCI RAID iface (/dev/rd/c3..) */
+#define MAJOR_DAC5      52    /* Fifth Mylex DAC960 PCI RAID iface  (/dev/rd/c4..) */
+#define MAJOR_DAC6      53    /* Sixth Mylex DAC960 PCI RAID iface  (/dev/rd/c5..) */
+#define MAJOR_DAC7      54    /* Seventh Mylex DAC960 PCI RAID iface (/dev/rd/c6..) */
+#define MAJOR_DAC8      55    /* Eighth Mylex DAC960 PCI RAID iface (/dev/rd/c7..) */
+
 #define MAJOR_IDE5      56    /* fifth IDE hard disk iface  (/dev/hd..) */
 #define MAJOR_IDE6      57    /* sixth IDE hard disk iface  (/dev/hd..) */
 #define MAJOR_LVM       58    /* Logical Volume Manager block device */
+
 #define MAJOR_EXPR      60    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR2     61    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR3     62    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR4     63    /* Experimental devices (without official numbers) */
 
 #define MAJOR_SD_SORT   64    /*** MAJOR_SD converted to this for sorting ***/
+
 #define MAJOR_SD2       65    /* SCSI disks 16-31           (/dev/sd..) */
 #define MAJOR_SD3       66    /* SCSI disks 32-47           (/dev/sd..) */
 #define MAJOR_SD4       67    /* SCSI disks 48-63           (/dev/sd..) */
@@ -125,26 +161,84 @@
 #define MAJOR_SD6       69    /* SCSI disks 80-95           (/dev/sd..) */
 #define MAJOR_SD7       70    /* SCSI disks 96-111          (/dev/sd..) */
 #define MAJOR_SD8       71    /* SCSI disks 112-127         (/dev/sd..) */
-#define MAJOR_SMART2    72    /* First Compaq Smart/2 iface (/dev/ida/c1d..) */
+
+#define MAJOR_SMART     72    /* First Compaq Smart/2 iface (/dev/ida/c0d..) */
+#define MAJOR_SMART2    73    /* Second Compaq Smart/2 iface (/dev/ida/c1d..) */
+#define MAJOR_SMART3    74    /* Third Compaq Smart/2 iface (/dev/ida/c1d..) */
+#define MAJOR_SMART4    75    /* Fourth Compaq Smart/2 iface (/dev/ida/c1d..) */
+#define MAJOR_SMART5    76    /* Fifth Compaq Smart/2 iface (/dev/ida/c1d..) */
+#define MAJOR_SMART6    77    /* Sixth Compaq Smart/2 iface (/dev/ida/c1d..) */
+#define MAJOR_SMART7    78    /* Seventh Compaq Smart/2 iface (/dev/ida/c1d..) */
+#define MAJOR_SMART8    79    /* Eighth Compaq Smart/2 iface (/dev/ida/c1d..) */
+
 #define MAJOR_I2O       80    /* First I2O hard disk iface  (/dev/i2o/hd..) */
+#define MAJOR_I2O2      81    /* Second I2O hard disk iface (/dev/i2o/hd..) */
+#define MAJOR_I2O3      82    /* Third I2O hard disk iface  (/dev/i2o/hd..) */
+#define MAJOR_I2O4      83    /* Fourth I2O hard disk iface (/dev/i2o/hd..) */
+#define MAJOR_I2O5      84    /* Fifth I2O hard disk iface  (/dev/i2o/hd..) */
+#define MAJOR_I2O6      85    /* Sixth I2O hard disk iface  (/dev/i2o/hd..) */
+#define MAJOR_I2O7      86    /* Seventh I2O hard disk iface (/dev/i2o/hd..) */
+#define MAJOR_I2O8      87    /* Eighth I2O hard disk iface (/dev/i2o/hd..) */
+
 #define MAJOR_IDE7      88    /* Seventh IDE hard disk iface (/dev/hd..) */
 #define MAJOR_IDE8      89    /* Eighth IDE hard disk iface (/dev/hd..) */
 #define MAJOR_IDE9      90    /* Ninth IDE hard disk iface (/dev/hd..) */
 #define MAJOR_IDE10     91    /* Tenth IDE hard disk iface (/dev/hd..) */
+
 #define MAJOR_PPDD      92    /* PPDD encrypted disks  (not supported) */
 #define MAJOR_NFTL      93    /* NAND Flash Translation Layer (Disk-On-Chip) */
 #define MAJOR_DOC      100    /* Disk-On-Chip driver  (obsolete) */
-#define MAJOR_AMI_HYP  101    /* AMI Hyper Disk RAID controller */
+#define MAJOR_AMI      101    /* AMI Hyper Disk RAID controller (/dev/amiraid/ar..) */
+
 #define MAJOR_CISS     104    /* First CCISS Drive Array iface  (/dev/cciss/c0..) */
+#define MAJOR_CISS2    105    /* Second CCISS Drive Array iface (/dev/cciss/c1..) */
+#define MAJOR_CISS3    106    /* Third CCISS Drive Array iface  (/dev/cciss/c2..) */
+#define MAJOR_CISS4    107    /* Fourth CCISS Drive Array iface (/dev/cciss/c3..) */
+#define MAJOR_CISS5    108    /* Fifth CCISS Drive Array iface  (/dev/cciss/c4..) */
+#define MAJOR_CISS6    109    /* Sixth CCISS Drive Array iface  (/dev/cciss/c5..) */
+#define MAJOR_CISS7    110    /* Seventh CCISS Drive Array iface (/dev/cciss/c6..) */
+#define MAJOR_CISS8    111    /* Seventh CCISS Drive Array iface (/dev/cciss/c7..) */
+
 #define MAJOR_IBM_ISER 112    /* IBM iSeries virtual disk   (/dev/iseries/vd..) */
 #define MAJOR_HPT370   114    /* Software RAID interfaces e.g.HPT370 (/dev/ataraid/..) */
 #define MAJOR_EVMS     117    /* Enterprise Volume Management System (/dev/evms/EVM..) */
-#define MAJOR_SD9      128    /* SCSI disks 128 -         (/dev/sd..) */
-#define MAJOR_SD16     135    /* SCSI disks      -255     (/dev/sd..) */
-#define MAJOR_DAC960_8 136    /* Ninth Mylex DAC960 PCI RAID iface */
+
+#define MAJOR_EXPR5    120    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR6    121    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR7    122    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR8    123    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR9    124    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR10   125    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR11   126    /* Experimental devices (without official numbers) */
+#define MAJOR_EXPR12   127    /* Experimental devices (without official numbers) */
+
+#define MAJOR_SD9      128    /* SCSI disks 128-143         (/dev/sd..) */
+#define MAJOR_SD10     129    /* SCSI disks 144-159         (/dev/sd..) */
+#define MAJOR_SD11     130    /* SCSI disks 160-175         (/dev/sd..) */
+#define MAJOR_SD12     131    /* SCSI disks 176-191         (/dev/sd..) */
+#define MAJOR_SD13     132    /* SCSI disks 192-207         (/dev/sd..) */
+#define MAJOR_SD14     133    /* SCSI disks 208-223         (/dev/sd..) */
+#define MAJOR_SD15     134    /* SCSI disks 224-239         (/dev/sd..) */
+#define MAJOR_SD16     135    /* SCSI disks 240-255         (/dev/sd..) */
+
+#define MAJOR_DAC9     136    /* Ninth Mylex DAC960 PCI RAID iface (/dev/rd/c8..) */
+#define MAJOR_DAC10    137    /* Tenth Mylex DAC960 PCI RAID iface (/dev/rd/c9..) */
+#define MAJOR_DAC11    138    /* Eleventh Mylex DAC960 PCI RAID iface (/dev/rd/c10..) */
+#define MAJOR_DAC12    139    /* Twelfth Mylex DAC960 PCI RAID iface  (/dev/rd/c11..) */
+#define MAJOR_DAC13    140    /* Thirteenth Mylex DAC960 PCI RAID iface (/dev/rd/c12..) */
+#define MAJOR_DAC14    141    /* Fourteenth Mylex DAC960 PCI RAID iface (/dev/rd/c13..) */
+#define MAJOR_DAC15    142    /* Fifteenth Mylex DAC960 PCI RAID iface (/dev/rd/c14..) */
+#define MAJOR_DAC16    143    /* Sixteenth Mylex DAC960 PCI RAID iface (/dev/rd/c15..) */
+
 #define MAJOR_EMD      153    /* Enhanced multi-disk RAID sets (/dev/emd/..) */
 #define MAJOR_CARM1    160    /* First Carmel SATA Disk controller (/dev/carmel/..) */
 #define MAJOR_CARM2    161    /* Second Carmel SATA Disk controller (/dev/carmel/..) */
+#define MAJOR_MMC      179    /* MMC card block devices     (/dev/mmcblk..) */
+#define MAJOR_USB      180    /* USB block devices          (/dev/ub..) */
+
+#define MAJOR_VXDSK    199    /* Veritas volume manager (VxVM) volumes (/dev/vx/dsk/..) */
+#define MAJOR_VXDMP    201    /* Veritas VxVM dynamic multipath devices (/dev/vx/dmp/..) */
+#define MAJOR_XVD      202    /* Xen Virtual Block Device Disks (/dev/xv..) */
 
 /* don't use the following */
 #define MAJOR_MDP      254    /* Enhanced multi-disk RAID sets [experimental] */
@@ -152,6 +246,7 @@
 /* high partitions (>15) on SATA hard disks */
 #define MAJOR_SATA1    259    /* high SATA disk partitions (Block Extended Major) */
 #define MAJOR_SATA2    260    /* high SATA disk partitions (Block Extended Major) (obsolete) */
+
 
 #define MAX_TOKEN     1023    /* max device Token length */
 #define MAX_IMAGE_NAME  15    /* maximum name length (w/o terminating NUL) */
