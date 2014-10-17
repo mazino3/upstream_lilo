@@ -3,6 +3,19 @@ NEWS about project LILO
 (For details see file 'CHANGELOG' in the source directory)
 
 
+Version 24.1  (minor and bugfix update of 24.0)
+
+ o Install .dat files of images, too.
+ o Install lilo.static, if existing.
+ o Add CFLAGS, CPPFLAGS, LDFLAGS everywhere needed.
+ o Better support for degraded mdadm RAID1.
+ o Large upgrade of script liloconfig with bugfixes and
+     update function, with fallback to kernel links.
+ o Update example config file.
+ o Update manpage of liloconfig and lilo-uuid-diskid.
+ o Add major device numbers for MMC cards and XVD disks.
+
+
 Version 24.0  (major and bugfix update of 23.2)
 
  o Update many manpages and add some from Debian.
