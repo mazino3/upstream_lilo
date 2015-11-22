@@ -8,17 +8,17 @@ they can be found in:
                at least       tested         programs
 package        version        until          inside
 -----------------------------------------------------------------
-coreutils      6.4.10         8.13           (general)
+coreutils      6.4.10         8.23           (general)
                      
 bcc            0.16.14        0.16.17        bcc
                      
 bin86          0.16.14        0.16.17        as86, ld86
                      
-gcc            3.3.5          4.9.1          gcc
+gcc            3.3.5          5.2.1          gcc
                      
-sharutils      4.6.3          4.14           uuencode, uudecode
+sharutils      4.6.3          4.15.2         uuencode, uudecode
                      
-perl           5.8.4          5.14.2         pod2man
+perl           5.8.4          5.20.2         pod2man
 
 
 
@@ -32,8 +32,8 @@ they can be found in:
                at least       tested         programs
 package        version        until          inside
 -----------------------------------------------------------------
-perl           5.8.8          5.14.2         (general)
+perl           5.8.8          5.20.2         (general)
 
-perl-modules   5.8.8          5.14.2         Getopt::Std,
+perl-modules   5.8.8          5.20.2         Getopt::Std,
                                              Pod::Usage
                                              File::Copy

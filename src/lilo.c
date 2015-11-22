@@ -2,7 +2,7 @@
  * 
  * Copyright 1992-1998 Werner Almesberger
  * Copyright 1999-2007 John Coffman
- * Copyright 2009-2014 Joachim Wiedorn
+ * Copyright 2009-2015 Joachim Wiedorn
  * All rights reserved.
  * 
  * Licensed under the terms contained in the file 'COPYING'
@@ -827,7 +827,7 @@ fprintf(errstd,"argc=%d, *argv=%s, ch=%c param=%s\n", argc, *argv, ch, param);
         }
         printf("  * Copyright (C) 1992-1998 Werner Almesberger  (until v20)\n"
                "  * Copyright (C) 1999-2007 John Coffman  (until v22)\n"
-               "  * Copyright (C) 2009-2014 Joachim Wiedorn  (since v23)\n"
+               "  * Copyright (C) 2009-2015 Joachim Wiedorn  (since v23)\n"
                "This program comes with ABSOLUTELY NO WARRANTY. This is free software \n"
                "distributed under the BSD License (3-clause). Details can be found in \n"
                "the file COPYING, which is distributed with this software.\n"

@@ -1,6 +1,6 @@
 # -*- makefile -*-
 #
-# Copyright 2009-2014 Joachim Wiedorn
+# Copyright 2009-2015 Joachim Wiedorn
 # All rights reserved.
 # 
 # Licensed under the terms contained in the file 'COPYING'

@@ -1,7 +1,7 @@
 ;  mbr.S  -  Master Boot Record to boot first partition marked active
 ;
 ;  Copyright 2002-2004 John Coffman
-;  Copyright 2009-2011 Joachim Wiedorn
+;  Copyright 2009-2015 Joachim Wiedorn
 ;  All rights reserved.
 ;
 ;  Licensed under the terms contained in the file 'COPYING'

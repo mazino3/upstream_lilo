@@ -3,6 +3,12 @@ NEWS about project LILO
 (For details see file 'CHANGELOG' in the source directory)
 
 
+Version 24.2  (minor and bugfix update of 24.1)
+
+ o Remove compile date and time in binary.
+ o Add 'password' element into example config file.
+ o Upgrade of liloconfig script and manpage.
+
 Version 24.1  (minor and bugfix update of 24.0)
 
  o Install .dat files of images, too.
