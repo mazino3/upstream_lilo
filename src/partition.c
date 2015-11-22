@@ -683,7 +683,7 @@ void do_install_mbr(char *part, char *what)
     if (fstat(fd,&st) < 0) die("stat: %s : %s", part,strerror(errno));
     if (!S_ISBLK(st.st_mode) && !force_fs) die("%s not a block device",part);
     if (st.st_rdev != (st.st_rdev & has_partitions(st.st_rdev)))
-	die("%s is not a master device with a primary parition table",part);
+	die("%s is not a master device with a primary partition table",part);
     if (read(fd,&buf,SECTOR_SIZE) != SECTOR_SIZE) die("read %s: %s",part, strerror(errno));
 
     cp = cfg_get_strg(cf_options,"force-backup");

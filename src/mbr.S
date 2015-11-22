@@ -53,7 +53,7 @@ _main:	cli			! NT 4 blows up if this is missing
 #if EXT_PART
 stage:	.byte	STAGE_MBR2	! search extended partitions, too
 #else
-stage:	.byte	STAGE_MBR	! search primary parition only
+stage:	.byte	STAGE_MBR	! search primary partition only
 #endif
 
 	.org	PARTS_LOAD+6

@@ -98,7 +98,7 @@ primary partitions will be described later.
 MORE TERMINOLOGY
 ================
 
-A boot record is "accessible", if it exists on a primary parition,
+A boot record is "accessible", if it exists on a primary partition,
 which may be marked "active"; or it is a Master Boot Record (MBR),
 written to sector 0 of a drive.
 
@@ -310,7 +310,7 @@ location is acceptable, as long as they are within the same RAID
 partition which you are making bootable.
 
 LILO variations:  version 22.2 enforces the placement of the map file
-on the RAID parition.  Version 22.3 eliminates the need for the
+on the RAID partition.  Version 22.3 eliminates the need for the
 boot.b and chain.b files, and relaxes the restriction that the
 message file be on the RAID partition by copying it into the map
 file.  Likewise, any bitmap= file is copied into the map file, so it
