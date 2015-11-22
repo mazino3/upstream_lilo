@@ -7,6 +7,6 @@ TODO for project LILO
 * patching sources because of some warnings while compiling
   with gcc 4.4.x and higher
 
-* Upgrade of all manpages (move to po files).
+* Upgrade of all manpages (move to pot files).
 
 * code cleanup.

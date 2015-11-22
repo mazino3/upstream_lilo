@@ -13,6 +13,7 @@ Changes for version 24.2 (unreleased) - Joachim Wiedorn
     - Upgrade of script liloconfig:
         * three steps of tests with three-state exit code
           to give the admin more information about failure.
+    - Update manpage pod files and its manpages.
 
 
 Changes for version 24.1 (17-October-2014) - Joachim Wiedorn
