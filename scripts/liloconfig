@@ -3,7 +3,7 @@
 #       liloconfig -  creating a new lilo.conf file
 #       
 #       
-#       Copyright 2011-2014 Joachim Wiedorn <joodevel at joonet.de>
+#       Copyright 2011-2015 Joachim Wiedorn <joodevel at joonet.de>
 #       
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ use File::Copy;
 #---- global variables
 my $prog = $0;
 $prog =~ s#.*/##;
-my $version = "0.4";
+my $version = "0.5";
 
 #---- parameter check
 # h: help, v: verbose, f: force
@@ -87,34 +87,57 @@ sub main {
 #-------------------- subroutines --------------------
 
 sub create_lilo_conf {
-	
-	my $found = 0;
+
 	my $exit = 1;
+	my $found1 = 0;
+	my $found2 = 0;
+	my $found3 = 0;
 
-	# search for root device in fstab and convert it
-	$found = detect_root_device();
+	# read fstab and search for root device
+	$found1 = read_fstab();
 
-	# convert root device to boot device
-	if ($found) { $found = convert_boot_device(); }
+	## STEP 1 ##
+	if ($found1 == 0)
+		# nothing found, exit by error
+		{ $found2 = 0;}
+	elsif ($found1 == 1)
+		# identify root device: root_dev and root_id
+		{ $found2 = convert_root_device(); }
+	elsif ($found1 == 2)
+		# nothing found, but exit successfully
+		{ $exit = 0; $found2 = 0;}
 
-	# finally write new lilo.conf file
-	if ($found) {
-	  if ($opt_u) { $exit = update_lilo_conf(); }
-	  else        { $exit = write_lilo_conf(); }
+	## STEP 2 ##
+	if ($found2 == 0)
+		# nothing found, exit by error
+		{ $found3 = 0;}
+	elsif ($found2 == 1)
+		# convert root device to boot device
+		{ $found3 = convert_boot_device(); }
+	elsif ($found2 == 2)
+		# nothing found, but exit successfully
+		{ $exit = 0; $found2 = 3;}
+
+	## STEP 3 ##
+	if ($found3 == 0)
+		# nothing found, exit by error
+		{ $exit = 1;}
+	elsif ($found3 == 1) {
+		if ((-f $liloconf) and not (-w $liloconf)) {
+			print "E: Have no write permissions to $liloconf !\n";
+			$exit = 1;
+		}
+		else {
+			# finally write new/updated lilo.conf file
+			if ($opt_u) { $exit = update_lilo_conf(); }
+			else        { $exit = write_lilo_conf(); }
+		}
 	}
+	elsif ($found3 == 2)
+		# nothing found, but exit successfully
+		{ $exit = 0;}
 
 	return $exit;
-}
-
-sub detect_root_device {
-	
-	# read fstab and find root device; 
-	my $found = read_fstab();
-
-	# identify root device: root_dev and root_id
-	if ($found) { $found = convert_root_device(); }
-	
-	return $found;
 }
 
 sub read_fstab {
@@ -152,7 +175,7 @@ sub read_fstab {
 		print "E: It seems you want configure the base filesystem \n" .
 		      "and I'm therefore simply going to exit successfully \n" .
 		      "without trying to actually configure LILO properly. \n";
-		$found = 0;
+		$found = 2;
 	}
 	if ($broken_fstab) {
 		print "E: It seems the file /etc/fstab is not properly \n" .
@@ -182,8 +205,7 @@ sub convert_root_device {
 
 			if (not -l "$uuidpath/$root_id") {
 				if($opt_v) { print "W: could not find UUID for $root_disk!\n"; }
-				## than we want use root_dev in lilo.conf
-				#$found = 0;
+				# than we will use root_dev in lilo.conf
 			}
 			else {
 				# finally add uuid label
@@ -300,8 +322,7 @@ sub convert_boot_device {
 
 		if(not -l "$boot_id") {
 			if($opt_v) { print "W: could not find DISK ID for $boot_disk!\n"; }
-			## not so important, than using boot_dev in lilo.conf
-			#$found = 0;
+			# not so important. Then using boot_dev in lilo.conf
 		}
 	}
 	
@@ -506,6 +527,7 @@ sub write_bootroot_option {
 			print MYFH_NEW $oldline;
 		}
 	}
+
 	close(MYFH_TMP);
 	close(MYFH_NEW);
 }
@@ -515,7 +537,7 @@ sub update_bootroot_option {
 	my $oldline = '';
 	my $newline = '';
 	my $ok = 0;
-	
+
 	open(MYFH_NEW, "> $liloconfnew") or die "Cannot open file: $!";
 	open(MYFH_TMP, "< $conftmp_2") or die "Cannot read file: $!";
 	
@@ -572,6 +594,7 @@ sub update_bootroot_option {
 			print MYFH_NEW $oldline;
 		}
 	}
+
 	close(MYFH_TMP);
 	close(MYFH_NEW);
 }
@@ -791,7 +814,8 @@ Lines in the configuration file /etc/lilo.conf:
 
   #large-memory
   lba32
-  boot = /dev/sda
+  #boot = /dev/sda
+  boot = /dev/disk/by-id/ata-SAMSUNG_SV1604N_S01FJ10X999999
   #root = /dev/sda1
   root = "UUID=18843936-00f9-4df0-a373-000d05a5dd44"
   map = /boot/map
@@ -800,14 +824,12 @@ Lines in the configuration file /etc/lilo.conf:
   prompt
   timeout = 100
   vga = normal
+  #password = 
   #default = Linux
 
   ### LILO per-image section ###
 
-  #boot = /dev/sda
-  boot = /dev/disk/by-id/ata-SAMSUNG_SV1604N_S01FJ10X999999
-
-  image = /boot/vmlinuz-3.5.0-trunk-686
+  image = /boot/vmlinuz-3.17-trunk-686
       label = "Linux"
       #root = /dev/sda1
       #root = "UUID=18843936-00f9-4df0-a373-000d05a5dd44"
@@ -815,9 +837,9 @@ Lines in the configuration file /etc/lilo.conf:
   #   restricted
   #   alias = 1
   #   optional
-      initrd = /boot/initrd.img-3.5.0-trunk-686
+      initrd = /boot/initrd.img-3.17-trunk-686
 
-  image = /boot/vmlinuz-3.2.0-4-686
+  image = /boot/vmlinuz-3.14-trunk-686
       label = "Linux Old"
       #root = /dev/sda1
       #root = "UUID=18843936-00f9-4df0-a373-000d05a5dd44"
@@ -825,11 +847,11 @@ Lines in the configuration file /etc/lilo.conf:
   #   restricted
   #   alias = 2
   #   optional
-      initrd = /boot/initrd.img-3.2.0-4-686
+      initrd = /boot/initrd.img-3.14-trunk-686
 
 =head1 COPYRIGHT and LICENSE
 
-Copyright (C) 2011-2014 Joachim Wiedorn
+Copyright (C) 2011-2015 Joachim Wiedorn
 
 This script is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by 

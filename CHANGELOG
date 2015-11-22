@@ -10,6 +10,9 @@ Changes for version 24.2 (unreleased) - Joachim Wiedorn
   -------
     - Update sample config file lilo.example.conf and config element
         'password'.
+    - Upgrade of script liloconfig:
+        * three steps of tests with three-state exit code
+          to give the admin more information about failure.
 
 
 Changes for version 24.1 (17-October-2014) - Joachim Wiedorn
