@@ -6,6 +6,11 @@ Changes for version 24.2 (unreleased) - Joachim Wiedorn
         builds (thanks to Dmitry Bogatov).
     - Remove obsolete hints to /boot/boot.b and other files in README.
 
+  General
+  -------
+    - Update sample config file lilo.example.conf and config element
+        'password'.
+
 
 Changes for version 24.1 (17-October-2014) - Joachim Wiedorn
 
