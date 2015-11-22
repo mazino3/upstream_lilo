@@ -1,3 +1,11 @@
+Changes for version 24.2 (unreleased) - Joachim Wiedorn
+
+  Sources
+  -------
+    - Remove compile date and time in binary to support reproducible
+        builds (thanks to Dmitry Bogatov).
+
+
 Changes for version 24.1 (17-October-2014) - Joachim Wiedorn
 
   Documentations

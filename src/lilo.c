@@ -719,7 +719,7 @@ fprintf(errstd,"argc=%d, *argv=%s, ch=%c param=%s\n", argc, *argv, ch, param);
 	        if (*(param = (*argv)+2)) argc++;
 	        else if (argc) param = *++argv;
 	        else reboot_arg = "";
-	        
+
 		while (argc) {
 			if (!reboot_arg)
 			    *(reboot_arg = alloc(strlen(param)+1)) = 0;
@@ -731,9 +731,6 @@ fprintf(errstd,"argc=%d, *argv=%s, ch=%c param=%s\n", argc, *argv, ch, param);
 			strcat(reboot_arg, param);
 			argc--;
 		    }
-#if 0
-fprintf(errstd,"REBOOT=\"%s\"\n", reboot_arg);		    
-#endif
 		break;
 #if !__MSDOS__
 	    case 's':
@@ -767,7 +764,7 @@ fprintf(errstd,"REBOOT=\"%s\"\n", reboot_arg);
 	            param = *++argv;
 	            argc--;
 	        }
-	        if (param) 
+	        if (param)
 		    verbose = to_number(param);
 		else
 	            if (verbose<0) verbose = 1;
@@ -836,11 +833,8 @@ fprintf(errstd,"REBOOT=\"%s\"\n", reboot_arg);
         );
         if (verbose>0) {
 #if !__MSDOS__
-#include <sys/utsname.h>
+  #include <sys/utsname.h>
           struct utsname buf;
-#endif
-          printf("Compiled at %s on %s%s\n", __TIME__, __DATE__, semi);
-#if !__MSDOS__
           if (verbose>=2 && uname(&buf)==0) {
             printf("Running %s kernel %s on %s\n",
               buf.sysname, buf.release, buf.machine);
