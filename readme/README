@@ -214,14 +214,13 @@ LILO is a collection of several programs and other files:
 
 LILO primarily accesses the following parts of the system:
 
-  The root file system partition  is important for two reasons: first, LILO 
+  The root file system partition is important for two reasons: first, LILO 
     sometimes has to tell the kernel where to look for it. Second, it is 
     frequently a convenient place for many other items LILO uses, such as 
     the boot sector, the /boot directory, and the kernels. 
-  The boot sector  contains the first part of LILO's boot loader. It loads 
-    the much larger second-stage loader. Both loaders are typically stored 
-    in the file /boot/boot.b 
-  The kernel  is loaded and started by the boot loader. Kernels typically 
+  The boot sector contains the first part of LILO's boot loader. It loads 
+    the much larger second-stage loader.
+  The kernel is loaded and started by the boot loader. Kernels typically 
     reside in the root directory or in /boot. 
 
 Note that many of the files LILO needs at boot time have to be accessible 
@@ -713,7 +712,6 @@ There are four approaches of how such problems can be solved:
 
 LILO depends on the BIOS to load the following items: 
 
-  - /boot/boot.b 
   - /boot/map (created when running /sbin/lilo) 
   - all kernels 
   - the boot sectors of all other operating systems it boots 
@@ -786,11 +784,10 @@ This case is equivalent to the configurations where only one disk is in the
 system. The Linux boot sector resides on the first hard disk and the second 
 disk is used later in the boot process.
 
-Only the location of the boot sector matters - everything else 
-(/boot/boot.b, /boot/map, the root file system, a swap partition, other 
-Linux file systems, etc.) can be located anywhere on the second disk, 
-provided that the constraints described in section "BIOS restrictions" are 
-met.
+Only the location of the boot sector matters - everything else (/boot/map,
+the root file system, a swap partition, other Linux file systems, etc.)
+can be located anywhere on the second disk, provided that the constraints 
+described in section "BIOS restrictions" are met.
 
 
 Two disks, Linux on second disk, first disk has an extended partition
@@ -2216,21 +2213,12 @@ Some of the files contained in lilo-21.tar.gz:
      Perl script to convert the LaTeX source of the user's guide to plain 
     ASCII. 
 
-Files created after  make  in lilo/ (among others):
+Files created after  make  in lilo source directory (among others):
 
-  lilo/boot.b   
-     Combined boot sector.  make install  puts this file into /boot 
-  lilo/chain.b   
-     Generic chain loader.  make install  puts this file into /boot 
-  lilo/os2_d.b   
-     Chain loader to load OS/2 from the second hard disk.  make install  
-    puts this file into /boot 
   lilo/lilo   
      LILO (map) installer.  make install  puts this file into /sbin 
-  lilo/activate   
-     Simple boot partition setter. 
   lilo/dparam.com   
-     MS-DOS executable of the disk parameter dumper. 
+     MS-DOS executable of the disk parameter dumper (optional).
 
 
 Normal first-time installation
@@ -2243,8 +2231,8 @@ First, you have to install the LILO files:
   - run  make  to compile and assemble all parts. 
   - run  make install  to copy all LILO files to the directories where 
     they're installed. /sbin should now contain the file lilo, /usr/sbin 
-    should contain keytab-lilo.pl, and /boot should contain boot.b, 
-    chain.b, and os2_d.b. 
+    should contain keytab-lilo.pl and /boot should contain some image
+    files (.bmp).
 
   *  E.g. /usr/src/lilo
 
@@ -2380,7 +2368,7 @@ The basic procedure is quite straightforward (see also section "BIOS
 restrictions"): 
 
   - a file system has to be created on the file system 
-  - the kernel and boot.b have to be copied to the floppy disk 
+  - the kernel has to be copied to the floppy disk 
   - /sbin/lilo has to be run to create the map file 
 
 This can be as easy as
@@ -2388,17 +2376,15 @@ This can be as easy as
 /sbin/mke2fs /dev/fd0
 [ -d /fd ] || mkdir /fd
 mount /dev/fd0 /fd
-cp /boot/boot.b /fd
 cp /zImage /fd
 echo image=/fd/zImage label=linux |
-  /sbin/lilo -C - -b /dev/fd0 -i /fd/boot.b -c -m /fd/map
+  /sbin/lilo -C - -b /dev/fd0 -c -m /fd/map
 umount /fd
 
 The command line of /sbin/lilo is a little tricky.  -C -  takes the 
 configuration from standard input (naturally, one could also write the 
-configuration into a file),  -b /dev/fd0  specifies that the boot sector is 
-written to the floppy disk,  -i /fd/boot.b  takes the first and second 
-stage loaders from the floppy,  -c  speeds up the load process, and  -m 
+configuration into a file),  -b /dev/fd0  specifies that the boot sector
+is written to the floppy disk,  -c  speeds up the load process and  -m 
 /fd/map  puts the map file on the floppy too.
 
 
