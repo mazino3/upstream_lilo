@@ -19,6 +19,9 @@
 #include <sys/stat.h>
 #endif
 
+#include <inttypes.h>
+#define PTR_WIDTH ((int) (sizeof(intptr_t) * 2))
+
 #ifndef PAGE_SIZE
 # define PAGE_SIZE 4096U
 #endif

@@ -193,7 +193,7 @@ static	union {
 	} tm;
 static	MENUTABLE *menu = &tm.mt;
 static	BITMAPLILOHEADER *lh = (void*)(tm.buffer +
-    			((long)&tm.mt.row - (long)&tm.bmlh.row));
+    			((intptr_t)&tm.mt.row - (intptr_t)&tm.bmlh.row));
 
 /* a convenience definition */
 #define mn tm.mt

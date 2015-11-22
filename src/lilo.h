@@ -19,7 +19,7 @@
 #if !__MSDOS__
 #define INT4 int
 #else
-#define INT4 long
+#define INT4 int32_t
 #endif /* !__MSDOS__ */
 
 /* This is the stuff to check the configuration:

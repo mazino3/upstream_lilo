@@ -5,6 +5,8 @@ Changes for version 24.2 (unreleased) - Joachim Wiedorn
     - Remove compile date and time in binary to support reproducible
         builds (thanks to Dmitry Bogatov).
     - Remove obsolete hints to /boot/boot.b and other files in README.
+    - Use system derived types to make code safe for both the 32-bit and
+        the 64-bit compilation environment. (thanks to TAMUKI Shoichi)
 
   General
   -------

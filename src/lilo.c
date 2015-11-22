@@ -193,11 +193,12 @@ extern int has_partitions_beta(dev_t dev);	/* defined in geometry.c */
 				"l=%d, ll=%d, f=%d, d=%d, ld=%d\n",
 			MAX_IMAGES, (int)sizeof(char),
 			(int)sizeof(short), (int)sizeof(int),
-			(int)sizeof(long), (int)sizeof(
+			(int)sizeof(int32_t), (int)sizeof(
 #if !__MSDOS__
-			long
+			int64_t),
+#else
+			int32_t),
 #endif /* !__MSDOS__ */
- 			     long),
 			(int)sizeof(float), (int)sizeof(double),
 			(int)sizeof(long double)
 			);

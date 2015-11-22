@@ -886,7 +886,7 @@ static int warned = 0, called = 0;
     struct stat st;
     int duplicate = 0, invalid = 0, ret = 0, ntcaution = 0;
     int raidcaution = 0;
-    long codes = 0L;
+    int32_t codes = 0L;
 
 /* called from  raid_setup  &  from  geo_open */
 /* allow only 1 call */
@@ -1167,7 +1167,7 @@ static int warned = 0, called = 0;
 			walk->next = disktab;
 			vm[j].dt = disktab = walk;
 #if BETA_TEST
-			if (verbose >= 4) printf("Allocated DT entry for device %04X  ptr=%08lx\n", vm[j].device, (long)walk);
+			if (verbose >= 4) printf("Allocated DT entry for device %04X  ptr=%0*" PRIxPTR "\n", vm[j].device, , PTR_WIDTH, (intptr_t)walk);
 #endif
 		    }
 
@@ -1281,7 +1281,7 @@ static int warned = 0, called = 0;
 
 
 
-    if (verbose>=2) printf("device codes (user assigned pf) = %lX\n", codes);
+    if (verbose>=2) printf("device codes (user assigned pf) = %" PRIX32 "\n", codes);
 
 /* mark those BIOS codes that are already used in the disk=/bios= table */
 
@@ -1311,7 +1311,7 @@ static int warned = 0, called = 0;
 	}
     }
 
-    if (verbose>=2) printf("device codes (user assigned) = %lX\n", codes);
+    if (verbose>=2) printf("device codes (user assigned) = %" PRIX32 "\n", codes);
 
     for (i=0; i<ndevs; i++) {
 	bios = vm[i].bios.probe;
@@ -1324,7 +1324,7 @@ static int warned = 0, called = 0;
 	}
     }
 
-    if (verbose>=2) printf("device codes (BIOS assigned) = %lX\n", codes);
+    if (verbose>=2) printf("device codes (BIOS assigned) = %" PRIX32 "\n", codes);
 
     for (bios=i=0; i<ndevs; i++) {
 	int j;
@@ -1346,7 +1346,7 @@ static int warned = 0, called = 0;
 	    walk->next = disktab;
 	    vm[i].dt = disktab = walk;
 #if BETA_TEST
-	    if (verbose >= 4) printf("Allocated DT entry for device %04X  ptr=%08lx\n", vm[i].device, (long)walk);
+	    if (verbose >= 4) printf("Allocated DT entry for device %04X  ptr=%0*" PRIxPTR "\n", vm[i].device, PTR_WIDTH, (intptr_t)walk);
 #endif
 	}
 	j = vm[i].dt->bios = vm[i].bios.actual;
@@ -1376,7 +1376,7 @@ static int warned = 0, called = 0;
 	inited = 1;
     }
 
-    if (verbose>=2) printf("device codes (canonical) = %lX\n", codes);
+    if (verbose>=2) printf("device codes (canonical) = %" PRIX32 "\n", codes);
 
     for (bios=8*sizeof(codes)-1; !(codes&(1L<<bios)) && bios>=0; ) bios--;
 

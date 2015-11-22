@@ -575,7 +575,7 @@ void do_activate(char *part, char *which)
 #if 1
     int part_max, count, number, fd;
     struct partition pt [PART_MAX_MAX+1];
-    long long daddr [PART_MAX_MAX+1];
+    int64_t daddr [PART_MAX_MAX+1];
     int modify=0;
     
     part_max = read_partitions(part, extended_pt ? PART_MAX_MAX : 0,
@@ -740,7 +740,7 @@ void do_install_mbr(char *part, char *what)
 
 /* partition table read */
 int read_partitions(char *part, int max, int *volid,
-		struct partition *p, long long *where)
+		struct partition *p, int64_t *where)
 {
     int fd, i;
     unsigned int second, base;
@@ -748,7 +748,7 @@ int read_partitions(char *part, int max, int *volid,
     struct partition pt[PART_MAX];
     BOOT_PARAMS_1 hdr;
     struct stat st;
-    long long daddr;
+    int64_t daddr;
 
     if ((fd=open(part,O_RDONLY))<0) die("Cannot open '%s'", part);
     if (fstat(fd,&st)<0) die("Cannot fstat '%s'", part);

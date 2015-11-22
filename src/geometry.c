@@ -55,7 +55,7 @@
 #endif
 
 #ifndef REISERFS_IOC_UNPACK
-#define REISERFS_IOC_UNPACK		_IOW(0xCD,1,long)
+#define REISERFS_IOC_UNPACK		_IOW(0xCD,1,int32_t)
 #endif
 
 #ifndef REISER4_SUPER_MAGIC
@@ -63,7 +63,7 @@
  /* (*(__u32 *)"R4Sb"); */
 #endif
 #ifndef REISER4_IOC_UNPACK
-#define REISER4_IOC_UNPACK      _IOW(0xCD,1,long)
+#define REISER4_IOC_UNPACK      _IOW(0xCD,1,int32_t)
 #endif
 #endif
 
@@ -1268,7 +1268,7 @@ int pass;
 	for (walk = disktab; walk; walk = walk->next)
 	    if (walk->device == (device & D_MASK(device))) break;
 #if BETA_TEST
-    if (verbose>=5) printf("walk=%08lx\n", (long)walk);
+    if (verbose>=5) printf("walk=%0*" PRIxPTR "\n", PTR_WIDTH, (intptr_t)walk);
 #endif
 
 #if 1

@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
 	fprintf(stderr, "*****Fatal:  INT != 4\n");
 	return 1;
     }
-    if (sizeof(long)>sizeof(int))
+    if (sizeof(int32_t)>sizeof(int))
 	fprintf(stderr, "**Note:  LONG is bigger than INT\n");
 	
     return 0;

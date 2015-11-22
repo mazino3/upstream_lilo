@@ -675,7 +675,7 @@ static void do_table(char *part)
 {
     struct partition pt [PART_MAX_MAX+1];
     int volid;
-    long long where[PART_MAX_MAX+1];
+    int64_t where[PART_MAX_MAX+1];
     int i,j;
     int extd = (extended_pt || verbose>0);
     
@@ -693,7 +693,7 @@ static void do_table(char *part)
     }
     if (verbose>=5) {
     	printf("\n");
-    	for (i=0; i<j; i++) printf("%4d%20lld%12d\n", i+1, where[i], (int)(where[i]/SECTOR_SIZE));
+    	for (i=0; i<j; i++) printf("%4d%20" PRId64 "%12d\n", i+1, where[i], (int)(where[i]/SECTOR_SIZE));
     }
 }
 
@@ -999,8 +999,8 @@ int bios_device(GEOMETRY *geo, int device)
     while (--bios >= 0x80) {
 	get_geom(bios, &bdata);
 	if (verbose>=5) {
-		printf("bios_dev: (0x%02X)  vol-ID=%08X  *PT=%08lX\n",
-			bios, bdata.serial_no, (long)bdata.pt);
+		printf("bios_dev: (0x%02X)  vol-ID=%08X  *PT=%0*" PRIXPTR "\n",
+			bios, bdata.serial_no, PTR_WIDTH, (intptr_t)bdata.pt);
 #ifdef DEBUG_PROBE
 		dump_pt((void*)bdata.pt);
 #endif

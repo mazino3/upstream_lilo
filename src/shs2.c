@@ -125,7 +125,7 @@ static void shsTransform(void)
 /*  Step A.  Copy the data buffer into the work buffer */
 /*  done  */
 #if SHS_DEBUG>=1
-   for (i=0; i<16; i++)  printf("W[%d] = %08lX\n", i, W[i]);
+   for (i=0; i<16; i++)  printf("W[%d] = %08" PRIX32 "\n", i, W[i]);
 #endif
 
 /*  Step B.  Expand the 16 words into 64 temporary data words */

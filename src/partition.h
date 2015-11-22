@@ -26,10 +26,10 @@ enum {PTW_OKAY=0, PTW_DOS=1, PTW_OS2=2, PTW_SWAP, PTW_XFS,
 		PTW_mask=7, PTW_NTFS=8};
 
 
-#define LLSECTORSIZE ((long long)SECTOR_SIZE)
+#define LLSECTORSIZE ((int64_t)SECTOR_SIZE)
 
 #if __GLIBC__ < 2 || __GLIBC_MINOR__ < 1
-typedef long long lloff_t;
+typedef int64_t lloff_t;
 
 #ifdef _syscall5
        lloff_t lseek64(unsigned int fd, lloff_t offs, unsigned int whence);
@@ -80,7 +80,7 @@ void do_install_mbr(char *where, char *what);
 /* Install a new MBR (Master Boot Record) */
 
 int read_partitions(char *part, int max, int *volid,
-		struct partition *p, long long *where);
+		struct partition *p, int64_t *where);
 /* read all partitions & partition tables */
 
 #endif

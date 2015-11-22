@@ -22,7 +22,7 @@ struct hd_geometry {
       unsigned char heads;
       unsigned char sectors;
       unsigned short cylinders;
-      unsigned long start;
+      uint32_t start;
 };
 
 /* hd/ide ctl's that pass (arg) ptrs to user space are numbered 0x030n/0x031n */
@@ -58,8 +58,8 @@ struct floppy_struct {
 #define MAJOR(dev) (unsigned int)((((dev_t)(dev) >> 8) & 0xfff) | ((unsigned int) ((dev_t)(dev) >> 32) & ~0xfff))
 #define MINOR(dev) (unsigned int)(((dev_t)(dev) & 0xff) | ((unsigned int) ((dev_t)(dev) >> 12) & ~0xff))
 #define MKDEV(major,minor) (((minor & 0xff) | ((major & 0xfff) << 8) \
-	  | (((unsigned long long int) (minor & ~0xff)) << 12) \
-	  | (((unsigned long long int) (major & ~0xfff)) << 32)))
+	  | (((uint64_t) (minor & ~0xff)) << 12) \
+	  | (((uint64_t) (major & ~0xfff)) << 32)))
 #else
 #include <sys/sysmacros.h>
 #ifdef major

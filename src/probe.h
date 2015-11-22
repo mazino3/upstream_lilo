@@ -34,7 +34,7 @@ struct disk_param {
    unsigned int n_cyl;
    unsigned int n_head;
    unsigned int n_sect;
-   long long n_sectors;
+   int64_t n_sectors;
    short n_byte;
    unsigned int edd_config_ptr;
 };
@@ -210,7 +210,7 @@ struct Edd {
    unsigned int  cylinders;
    unsigned int  heads;
    unsigned int  sectors;
-   long long      total_sectors;
+   int64_t        total_sectors;
    unsigned short sector_size;
 
    unsigned short offset,
